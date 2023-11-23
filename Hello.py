@@ -16,17 +16,23 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 # Specify the primary menu definition
 menu_data = [
     {'icon': "far fa-copy", 'label': "Gatherizer"},
-    {'icon': "far fa-copy", 'label': "Colorizer"},
+    {'icon': "far fa-copy", 'label': "Qualification des profils data"},
     {'icon': "far fa-copy", 'label': "Dispenser"},
 ]
 
 # Initialize session state
 if 'selected_tab' not in st.session_state:
-    st.session_state.selected_tab = "Colorizer"
+    st.session_state.selected_tab = "Qualification des profils data"
 
 def colorizer_tab():
-    st.title("Mes questions.")
-    st.write("Add Questions and Answers to Google Sheets")
+    st.title("Table de qualification des profils data")
+    st.markdown("Vous envisagez de classer une population en différents profils _data_")
+    st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
+    st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
+    st.markdown("A chaque question est associé un ensemble de 4 **réponses** possibles.")
+    st.markdown("Chaque réponse correspond à un certain **niveau de maîtrise**")
+    st.header('Ma :blue[table] :sunglasses:')
+
 
     col1, col2 = st.columns(2)
 
@@ -39,10 +45,10 @@ def colorizer_tab():
         }
 
     with col1:
-        profile_type = st.text_input("Profile_type")
-        question = st.text_input("Question")
-        answer = st.text_input("Possible Answer")
-        score = st.selectbox("Profile Score", [1, 2, 3, 4])
+        profile_type = st.text_input("La profil")
+        question = st.text_input("La question")
+        answer = st.text_input("Une réponse possible")
+        score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
 
         if st.button("Add to Google Sheets", key=8):
             st.session_state.data['profile_type'].append(profile_type)
@@ -245,7 +251,7 @@ def dispenser_tab():
 
 # Create a function to display the selected tab content
 def display_tab_content(tab_label):
-    if tab_label == "Colorizer":
+    if tab_label == "Qualification des profils data":
         colorizer_tab()
     elif tab_label == "Gatherizer":
         gatherizer_tab()
