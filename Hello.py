@@ -15,23 +15,23 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Specify the primary menu definition
 menu_data = [
-    {'icon': "far fa-copy", 'label': "Gatherizer"},
-    {'icon': "far fa-copy", 'label': "Qualification des profils data"},
-    {'icon': "far fa-copy", 'label': "Dispenser"},
+    {'icon': "far fa-copy", 'label': "Qualification"},
+    {'icon': "far fa-copy", 'label': "Recrutement"},
+    {'icon': "far fa-copy", 'label': "Position"},
 ]
 
 # Initialize session state
 if 'selected_tab' not in st.session_state:
-    st.session_state.selected_tab = "Qualification des profils data"
+    st.session_state.selected_tab = "Qualification"
 
 def colorizer_tab():
     st.title("Table de qualification des profils data")
-    st.markdown("Vous envisagez de classer une population en différents profils _data_")
+    st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
     st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
     st.markdown("A chaque question est associé un ensemble de 4 **réponses** possibles.")
     st.markdown("Chaque réponse correspond à un certain **niveau de maîtrise**")
-    st.header('Ma :blue[table] :sunglasses:')
+    
 
 
     col1, col2 = st.columns(2)
@@ -45,12 +45,13 @@ def colorizer_tab():
         }
 
     with col1:
-        profile_type = st.text_input("La profil")
+        st.header('Ma :blue[table] :sunglasses:')
+        profile_type = st.text_input("Le profil")
         question = st.text_input("La question")
         answer = st.text_input("Une réponse possible")
         score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
 
-        if st.button("Add to Google Sheets", key=8):
+        if st.button("Ajouter", key=8):
             st.session_state.data['profile_type'].append(profile_type)
             st.session_state.data['question'].append(question)
             st.session_state.data['answer'].append(answer)
@@ -58,14 +59,14 @@ def colorizer_tab():
             # Combine the existing data from Google Sheets and new data
             existing_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
             existing_df = pd.DataFrame(existing_data)
-            st.write("Existing Data:")
-            st.dataframe(existing_df)
+            #st.write("Existing Data:")
+            #st.dataframe(existing_df)
             new_df = pd.DataFrame(st.session_state.data)
-            st.write("New Data:")
-            st.dataframe(new_df)
+            #st.write("New Data:")
+            #st.dataframe(new_df)
             combined_df = pd.concat([existing_df, new_df], ignore_index=True)
-            st.write("Combined Data:")
-            st.dataframe(combined_df)
+            #st.write("Combined Data:")
+            #st.dataframe(combined_df)
             conn.update(worksheet="Colorizer", data=combined_df)
             st.success("Data added to Google Sheets")
             st.session_state.data = {
@@ -77,56 +78,29 @@ def colorizer_tab():
 
     
     with col2:
-        value = streamlit_image_coordinates("https://images.unsplash.com/photo-1560017487-c44f80136c56?auto=format&fit=crop&q=80&w=300")
-        if 'profile' not in st.session_state:
-            st.session_state.profile = {
-                'x': [],
-                'y': [],
-                'label': [],
-                'text_inputs': []
-            }
-        if value is not None:
-            text_input = st.text_input(f"Text for x={value}")
-            if st.button("Coucou", key=f"profile_pro_{value}") :
-                st.session_state.profile['x'].append(value)
-                st.session_state.profile['y'].append(value)
-                st.session_state.profile['label'].append("Label for x={}".format(value))
-                st.session_state.profile['text_inputs'].append(text_input)
-        
-                # Check if text_inputs exist and are not empty
-                if st.session_state.profile.get('text_inputs'):
-                    # for every value inside st.session_state.profile['text_inputs'], print st.metric inside each column equally
-                    cola, colb, colc = st.columns(3)
-                    text_inputs = st.session_state.profile['text_inputs']
-
-                    for i, text_display in enumerate(text_inputs):
-                        if i % 3 == 0:
-                            with cola:
-                                st.metric(label="profile", value=text_display)
-                        elif i % 3 == 1:
-                            with colb:
-                                st.metric(label="profile", value=text_display)
-                        else:
-                            with colc:
-                                st.metric(label="profile", value=text_display)
+        st.header(':blue[Inspiration] :star-struck:')
+        st.image("resource/skills_framework.png")
+         
                     
 
 def gatherizer_tab():
-    st.image('resource/logo_forge.png', width=400, use_column_width=True)
-    st.title("Gatherizer Tab")
-    st.markdown("Gatherizer Tab")
+    #st.image('resource/logo_forge.png', width=400, use_column_width=True)
+    st.title("Recrutement des profils data")
+    st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     #create an empty dataframe
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
     # Add content for the form
     question_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
     question_df = pd.DataFrame(question_data)
-    st.write(question_df.profile_type.values)
+    #st.write(question_df.profile_type.values)
     unique_questions = question_df.question.unique()
+    st.header("Qui êtes-vous ? :disguised_face:")
     nom = st.text_input("Nom", key='nom')
     prenom = st.text_input("Prenom", key='prenom')
     mail = st.text_input("Mail", key='mail')
     #append the values of the inputs to the df_answers
     df_answers = df_answers.append({'nom': nom, 'prenom': prenom, 'mail': mail}, ignore_index=True)
+    st.header("Parlons de vous (et de data) :floppy_disk: ")
 
 
     for question_people in unique_questions:
@@ -138,16 +112,18 @@ def gatherizer_tab():
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
 
-        st.dataframe(df)
-    if st.button("Add"):
+        #st.dataframe(df)
+    if st.button("Je valide"):
         conn.update(worksheet="Gatherizer", data=df_answers)
+        st.success("Bien reçu ! A bientôt <3")
     
     # Now, outside the loop, you can display the complete df_answers DataFrame
-    st.dataframe(df_answers)
+    #st.dataframe(df_answers)
     
 
 def dispenser_tab():
-    st.title("Dispenser Tab")
+    st.header("Position des profils")
+    st.markdown("Grâce au _radar graph_, analysez la distribution des profils au sein de votre population")
     with elements("nivo_charts"):
         form_data = conn.read(worksheet="Gatherizer", usecols=["nom","prenom","mail","question","answer","score","profile_type"],ttl=0, nrows=10) 
         # Obtenez les valeurs uniques de la colonne "nom"
@@ -173,7 +149,7 @@ def dispenser_tab():
             DATA.append(profile_data)
 
         # Affichez la liste DATA
-        st.write(DATA)
+        #st.write(DATA)
 
         with mui.Box(sx={"height": 500}):
             nivo.Radar(
@@ -227,7 +203,9 @@ def dispenser_tab():
     form_data = form_data[form_data['score'].notna()]
     form_data['score'] = form_data['score'].str.strip('[]').astype(int)
     form_data_grouped = form_data.groupby(['nom', 'prenom'])['score'].mean().reset_index()
-    form_data_grouped['group'] = pd.NA
+    form_data_grouped['groupe'] = pd.NA
+    st.header("Constitution des groupes")
+    st.markdown("Répartissez les profils au sein de groupes")
     groups = st.data_editor(
         form_data_grouped,
         column_config={
@@ -241,21 +219,22 @@ def dispenser_tab():
         )
         }
     )
-    st.dataframe(groups)
-    st.write(st.session_state)
-    if st.button("Add ", key=8):
+    #st.dataframe(groups)
+    #st.write(st.session_state)
+    if st.button("Assigner", key=8):
         conn.update(worksheet="Dispenser", data=groups)
+        st.success("C'est fait !")
         
 
 
 
 # Create a function to display the selected tab content
 def display_tab_content(tab_label):
-    if tab_label == "Qualification des profils data":
+    if tab_label == "Qualification":
         colorizer_tab()
-    elif tab_label == "Gatherizer":
+    elif tab_label == "Recrutement":
         gatherizer_tab()
-    elif tab_label == "Dispenser":
+    elif tab_label == "Position":
         dispenser_tab()
 #
 over_theme = {'txc_inactive': 'white','menu_background':'#1c3f4b','txc_active':'#e95459','option_active':''}
@@ -264,7 +243,7 @@ menu_id = hc.nav_bar(
     menu_definition=menu_data,
     override_theme=over_theme,
     #home_name='Home',
-    login_name='Logout',
+    #login_name='Logout',
     hide_streamlit_markers=False,
     sticky_nav=True,
     sticky_mode='pinned',
@@ -276,16 +255,11 @@ selected_tab_label = menu_id
 # Display the selected tab content
 display_tab_content(selected_tab_label)
 
-if st.button('Click me'):
-    st.info('You clicked at: {}'.format(datetime.datetime.now()))
-
-if st.sidebar.button('Click me too'):
-    st.info('You clicked at: {}'.format(datetime.datetime.now()))
 
 # Store the selected tab in the session state
 if selected_tab_label != st.session_state.selected_tab:
     st.session_state.selected_tab = selected_tab_label
 
 # Get the id of the menu item clicked
-st.info(f"Selected tab: {selected_tab_label}")
-st.info(f"Menu {menu_id}")
+#st.info(f"Selected tab: {selected_tab_label}")
+#st.info(f"Menu {menu_id}")
