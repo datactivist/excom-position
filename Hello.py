@@ -11,7 +11,7 @@ from streamlit_elements import nivo, elements, mui, html
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
 
 # Create a connection object.
-conn = st.experimental_connection("gsheets", type=GSheetsConnection)
+conn = st.connection("gsheets", type=GSheetsConnection)
 
 # Specify the primary menu definition
 menu_data = [
@@ -25,7 +25,7 @@ if 'selected_tab' not in st.session_state:
     st.session_state.selected_tab = "Colorizer"
 
 def colorizer_tab():
-    st.title("Colorizer Tab !")
+    st.title("Mes questions")
     st.write("Add Questions and Answers to Google Sheets")
 
     col1, col2 = st.columns(2)
