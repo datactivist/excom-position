@@ -9,7 +9,29 @@ from streamlit_elements import nivo, elements, mui, html
 
 # Make it look nice from the start
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
-
+custom_html = """
+<div class="banner">
+    <img src="https://github.com/ArthurSrz/forge-data-position-final/blob/main/resource/logo_forge.png?raw=true" alt="Banner Image">
+</div>
+<style>
+    .banner {
+        width: 100%;
+        height: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        padding: 10px;
+        
+    }
+    .banner img {
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+"""
+# Display the custom HTML
+st.components.v1.html(custom_html)
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
 
@@ -106,8 +128,8 @@ def gatherizer_tab():
     for question_people in unique_questions:
         st.write(question_people)
         answer_people = st.selectbox("Answers", question_df[question_df.question == question_people].answer, index=None)
-        score = question_df[question_df.answer == answer_people].score.values
-        profile_type_val = question_df[question_df.answer == answer_people].profile_type.values
+        score = question_df[question_df.answer == answer_people].score.values[0]
+        profile_type_val = question_df[question_df.answer == answer_people].profile_type.values[0]
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'answer': [answer_people],'score': [score],'profile_type':[profile_type_val]})
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
@@ -246,7 +268,7 @@ menu_id = hc.nav_bar(
     #login_name='Logout',
     hide_streamlit_markers=False,
     sticky_nav=True,
-    sticky_mode='pinned',
+    sticky_mode='pinned'
 )
 
 # Get the selected tab label from the menu
