@@ -3,3 +3,10 @@ numpy
 pandas
 pydeck
 streamlit
+st-gsheets-connection
+pandas
+streamlit-discourse
+hydralit_components
+st_clickable_images
+streamlit_image_coordinates
+streamlit-elements
