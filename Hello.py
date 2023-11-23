@@ -25,7 +25,7 @@ if 'selected_tab' not in st.session_state:
     st.session_state.selected_tab = "Colorizer"
 
 def colorizer_tab():
-    st.title("Mes questions")
+    st.title("Mes questions.")
     st.write("Add Questions and Answers to Google Sheets")
 
     col1, col2 = st.columns(2)
