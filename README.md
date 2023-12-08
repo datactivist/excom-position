@@ -1,7 +1,4 @@
-After the [[Abstracting Data position toward a Data position forge]], we'll move to the instantiation phase. 
-
-
-## Architecture of the Data Position forge 
+## La forge à Data Position
 
 L'architecture est constituée : 
 
@@ -31,7 +28,7 @@ Il s'agit d'un Google sheet avec 3 onglets :
 	- le niveau de maitrise associé à chacune des réponses 
 
 
-![[onglet_colorizer.png]]
+![[media/onglet_colorizer.png]]
 <center>Aperçu de l'onglet "Colorizer"</center>
 
 
