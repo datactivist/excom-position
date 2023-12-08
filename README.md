@@ -28,19 +28,19 @@ Il s'agit d'un Google sheet avec 3 onglets :
 	- le niveau de maitrise associé à chacune des réponses 
 
 
-![[media/onglet_colorizer.png]]
+![](media/onglet_colorizer.png)
 <center>Aperçu de l'onglet "Colorizer"</center>
 
 
 * l'onglet "Gatherizer" stocke les réponses des membres de la population aux questions qui permettent de qualifier les profils
 
-![[onglet_gatherizer.png]]
+![](media/onglet_gatherizer.png)
 <center>Aperçu de l'onglet "Gatherizer"</center>
 
 
 * l'onglet "Dispenser" stocke la répartition des membres de la population en différents groupes
 
-![[onglet_dispenser.png]]
+![](media/onglet_dispenser.png)
 <center>Aperçu de l'onglet "Dispenser"</center>
 
 ### A propos de l'application Web 
@@ -48,18 +48,18 @@ Il s'agit d'un Google sheet avec 3 onglets :
 L'application Web permet d'accéder via une seule URL à toutes les fonctionnalités du Data position. Ainsi, le concepteur pourra y : 
 * créer sa table de qualification
 
-![[onglet_table_qualification.png]]
+![](onglet_table_qualification.png)
 <center>Aperçu de l'onglet "Qualification"</center>
 
 
 * diffuser le questionnaire nécessaires pour qualifier les membres de sa population
 
-![[onglet_recensement.png]]
+![](onglet_recensement.png)
 <center>Aperçu de l'onglet "Recrutement"</center>
 
 * visualiser, en fonction des réponses, la répartition par profil des membres de sa population 
 
-![[onglet_position.png]]
+![](onglet_position.png)
 <center>Aperçu de l'onglet "Recrutement"</center>
 
 * dispatcher dans différents groupes les membres de sa population . 
