@@ -6,7 +6,6 @@ import hydralit_components as hc
 import datetime
 from streamlit_image_coordinates import streamlit_image_coordinates
 from streamlit_elements import nivo, elements, mui, html
-from streamlit_card import card
 
 # Make it look nice from the start
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')

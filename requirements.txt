@@ -10,4 +10,3 @@ hydralit_components
 st_clickable_images
 streamlit_image_coordinates
 streamlit-elements
-streamlit-card
