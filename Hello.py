@@ -54,7 +54,57 @@ def colorizer_tab():
     st.markdown("A chaque question est associé un ensemble de 4 **réponses** possibles.")
     st.markdown("Chaque réponse correspond à un certain **niveau de maîtrise**")
     
-    st.markdown("This is where I will add the two options for the user to choose from")
+    st.header("Liste des questionnaires de la communauté")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        with st.container(border=True):
+            st.text("Data Position Maitre")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=1)
+        with st.container(border=True):
+            st.text("Data Position Expert")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=2)
+        with st.container(border=True):
+            st.text("k")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=3)
+    with col2:
+        with st.container(border=True):
+            st.text("h")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=4)
+        with st.container(border=True):
+            st.text("w")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=5)
+        with st.container(border=True):
+            st.text("k")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=6)
+    with col3:
+        with st.container(border=True):
+            st.text("h")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=7)
+        with st.container(border=True):
+            st.text("w")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=8)
+        with st.container(border=True):
+            st.text("k")
+            expander = st.expander("Description")
+            expander.write("Hello")
+            st.button("Charger le data position",type="primary", key=9)
+    
 
 
     col1, col2 = st.columns(2)
@@ -74,7 +124,7 @@ def colorizer_tab():
         answer = st.text_input("Une réponse possible")
         score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
 
-        if st.button("Ajouter", key=8):
+        if st.button("Ajouter", key=10):
             st.session_state.data['profile_type'].append(profile_type)
             st.session_state.data['question'].append(question)
             st.session_state.data['answer'].append(answer)
