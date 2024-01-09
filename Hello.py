@@ -68,7 +68,7 @@ def colorizer_tab():
 
     with col1:
         st.header('Ma :blue[table] :sunglasses:')
-        profile_type = st.text_input("Le profil")
+        profile_type = st.text_input("Le profil :")
         question = st.text_input("La question")
         answer = st.text_input("Une réponse possible")
         score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
