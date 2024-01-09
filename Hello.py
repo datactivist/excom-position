@@ -6,6 +6,7 @@ import hydralit_components as hc
 import datetime
 from streamlit_image_coordinates import streamlit_image_coordinates
 from streamlit_elements import nivo, elements, mui, html
+from streamlit_card import card
 
 # Make it look nice from the start
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
@@ -54,6 +55,7 @@ def colorizer_tab():
     st.markdown("A chaque question est associé un ensemble de 4 **réponses** possibles.")
     st.markdown("Chaque réponse correspond à un certain **niveau de maîtrise**")
     
+    st.markdown("This is where I will add the two options for the user to choose from")
 
 
     col1, col2 = st.columns(2)
@@ -68,7 +70,7 @@ def colorizer_tab():
 
     with col1:
         st.header('Ma :blue[table] :sunglasses:')
-        profile_type = st.text_input("Le profil :")
+        profile_type = st.text_input("Le profil")
         question = st.text_input("La question")
         answer = st.text_input("Une réponse possible")
         score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
