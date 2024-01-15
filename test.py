@@ -1,7 +1,13 @@
-import gristapi
+from grist_api import GristDocAPI
+import os
 
-# Remplace 'YOUR_API_KEY' par la clé API que tu as obtenue
-grist_api_key = '3a00dc02645f6f36f4e1c9449dd4a8529b5e9149'
+SERVER = "https://docs.getgrist.com"
+DOC_ID = "nSV5r7CLQCWzKqZCz7qBor"
+API_KEY = st.secrets["grist_api_key"]
 
-# Initialise la connexion Grist avec la clé API
-grist_conn = gristapi.GristAPI(grist_api_key)
+# Initialize GristDocAPI with document ID, server, and API key
+api = GristDocAPI(DOC_ID, server=SERVER, api_key=API_KEY)
+
+# Fetch data from the "Form2" table
+data = api.fetch_table("Form2")
+print(data)
