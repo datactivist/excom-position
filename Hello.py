@@ -6,6 +6,8 @@ import hydralit_components as hc
 import datetime
 from streamlit_image_coordinates import streamlit_image_coordinates
 from streamlit_elements import nivo, elements, mui, html
+from grist_api import GristDocAPI
+import os
 
 # Make it look nice from the start
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
@@ -36,6 +38,25 @@ st.components.v1.html(custom_html)
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
 
+#Set up the Grist API
+SERVER = "https://docs.getgrist.com"
+DOC_ID = "nSV5r7CLQCWzKqZCz7qBor"
+API_KEY = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
+
+# Initialize GristDocAPI with document ID, server, and API key
+api = GristDocAPI(DOC_ID, server=SERVER, api_key=API_KEY)
+
+#Function to load Grist data
+def charger_data_position():
+    # Example: Fetch all rows from the "Form2" table
+    data = api.fetch_table('Form2')
+    
+    # Display the data in Streamlit
+    st.write("Loaded Data:")
+    st.write(data)
+
+
+
 
 # Specify the primary menu definition
 menu_data = [
@@ -50,6 +71,8 @@ if 'selected_tab' not in st.session_state:
 
 def colorizer_tab():
     st.title("Table de qualification des profils data")
+    if st.button("Charger le data position", type="primary", key=1):
+            charger_data_position()
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
     st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
