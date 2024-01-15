@@ -32,8 +32,10 @@ custom_html = """
 """
 # Display the custom HTML
 st.components.v1.html(custom_html)
+
 # Create a connection object.
 conn = st.connection("gsheets", type=GSheetsConnection)
+
 
 # Specify the primary menu definition
 menu_data = [
