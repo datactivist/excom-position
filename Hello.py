@@ -243,7 +243,7 @@ def gatherizer_tab():
 
     for question_people in unique_questions:
         st.write(question_people)
-        answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].answer, index=None)
+        answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].reponse, index=None)
         score = grist_question_df[grist_question_df.answer == answer_people].score.values
         profile_type_val = grist_question_df[grist_question_df.answer == answer_people].profile_type.values
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'answer': [answer_people],'score': [score],'profile_type':[profile_type_val]})
