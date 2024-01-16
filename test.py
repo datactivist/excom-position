@@ -13,12 +13,12 @@ table_id = "Form2"
 
 # Construct the URL using the provided variables
 url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
-
 response = requests.get(url, headers=headers)
 
 # Check the response status code
 if response.status_code == 200:
     data = response.json()
+    st.write(data)
     print("Houra")
     columns = data['records'][0]['fields'].keys()
     print(list(columns)[0])

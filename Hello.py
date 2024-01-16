@@ -8,6 +8,8 @@ from streamlit_image_coordinates import streamlit_image_coordinates
 from streamlit_elements import nivo, elements, mui, html
 from grist_api import GristDocAPI
 import os
+import requests
+import json
 
 # Make it look nice from the start
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
@@ -55,7 +57,31 @@ def charger_data_position():
     st.write("Loaded Data:")
     st.write(data)
 
+#Load the data from Grist
+api_key = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
 
+headers = {
+    "Authorization": f"Bearer {api_key}"
+}
+
+subdomain = "docs"
+doc_id = "nSV5r7CLQCWzKqZCz7qBor"
+table_id = "Form2"
+
+
+# Construct the URL using the provided variables
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+response = requests.get(url, headers=headers)
+
+# Check the response status code
+if response.status_code == 200:
+    data = response.json()
+    print("Houra")
+    columns = data['records'][0]['fields'].keys()
+    print(list(columns)[0])
+    # Process the data as needed
+else:
+    print(f"Request failed with status code {response.status_code}")
 
 
 # Specify the primary menu definition
@@ -187,11 +213,25 @@ def gatherizer_tab():
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     #create an empty dataframe
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
-    # Add content for the form
+    
+    #turn the json "data" into a dataframe
+    grist_question_df = pd.json_normalize(data['records'])
+    print(grist_question_df)
+    
+    # Add content from the Grist database
+    
+    #grist_question_df = pd.DataFrame(data['records'])
+    grist_question_df.columns = [col.replace('fields.', '') for col in grist_question_df.columns]
+    st.write(grist_question_df)
+    
+    # Add content from the google spreadsheet 
     question_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
-    question_df = pd.DataFrame(question_data)
+    spreadsheet_question_df = pd.DataFrame(question_data)
+    
+   
+    
     #st.write(question_df.profile_type.values)
-    unique_questions = question_df.question.unique()
+    unique_questions = grist_question_df.question.unique()
     st.header("Qui êtes-vous ? :disguised_face:")
     nom = st.text_input("Nom", key='nom')
     prenom = st.text_input("Prenom", key='prenom')
@@ -203,9 +243,9 @@ def gatherizer_tab():
 
     for question_people in unique_questions:
         st.write(question_people)
-        answer_people = st.selectbox("Answers", question_df[question_df.question == question_people].answer, index=None)
-        score = question_df[question_df.answer == answer_people].score.values
-        profile_type_val = question_df[question_df.answer == answer_people].profile_type.values
+        answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].answer, index=None)
+        score = grist_question_df[grist_question_df.answer == answer_people].score.values
+        profile_type_val = grist_question_df[grist_question_df.answer == answer_people].profile_type.values
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'answer': [answer_people],'score': [score],'profile_type':[profile_type_val]})
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
