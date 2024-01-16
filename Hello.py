@@ -119,7 +119,7 @@ if 'selected_tab' not in st.session_state:
 def colorizer_tab():
     st.title("Table de qualification des profils data")
     if st.button("Charger le data position", type="primary", key=100):
-            charger_data_position()
+        st.session_state.selected_data = data2
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
     st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
@@ -134,8 +134,6 @@ def colorizer_tab():
             expander = st.expander("Description")
             expander.write("Hello")
             if st.button("Charger le data position",type="primary", key=1):
-                global data
-                data = data2
                 st.write("Houra")
         with st.container(border=True):
             st.text("Data Position Expert")
@@ -235,11 +233,20 @@ def gatherizer_tab():
     #st.image('resource/logo_forge.png', width=400, use_column_width=True)
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
+    
+    # Check if selected data is available in session_state
+    if 'selected_data' not in st.session_state:
+        st.warning("Please select data in the Colorizer tab first.")
+        return
+
+    st.write(st.session_state.selected_data)
+    
+    
     #create an empty dataframe
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
     st.write(data)
     #turn the json "data" into a dataframe
-    grist_question_df = pd.json_normalize(data['records'])
+    grist_question_df = pd.json_normalize(st.session_state.selected_data['records'])
     print(grist_question_df)
     
     # Add content from the Grist database
