@@ -195,33 +195,51 @@ def colorizer_tab():
         st.header('Ma :blue[table] :sunglasses:')
         profile_type = st.text_input("Le profil")
         question = st.text_input("La question")
-        answer = st.text_input("Une réponse possible")
+        reponse = st.text_input("Une réponse possible")
         score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
+        
+        def add_data_to_grist_table(profile_type, question, reponse, score):
+            # Create a new row with the provided data
+            new_records = [
+                {'profile_type': profile_type, 'question': question, 'reponse': reponse, 'score': score}
+                ]
 
-        if st.button("Ajouter", key=10):
-            st.session_state.data['profile_type'].append(profile_type)
-            st.session_state.data['question'].append(question)
-            st.session_state.data['answer'].append(answer)
-            st.session_state.data['score'].append(score)
-            # Combine the existing data from Google Sheets and new data
-            existing_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
-            existing_df = pd.DataFrame(existing_data)
-            #st.write("Existing Data:")
-            #st.dataframe(existing_df)
-            new_df = pd.DataFrame(st.session_state.data)
-            #st.write("New Data:")
-            #st.dataframe(new_df)
-            combined_df = pd.concat([existing_df, new_df], ignore_index=True)
-            #st.write("Combined Data:")
-            #st.dataframe(combined_df)
-            conn.update(worksheet="Colorizer", data=combined_df)
-            st.success("Data added to Google Sheets")
-            st.session_state.data = {
-                'profile_type': [],
-                'question': [],
-                'answer': [],
-                'score': []
-            }
+            # Use the Grist API to add the new row to the Grist table
+            api.add_records('Form0', new_records)
+        
+        #Button to add questions to Grist
+        if st.button("Ajouter", key=78):
+            # Add the input values to Grist table
+            add_data_to_grist_table(profile_type, question, reponse, score)
+            
+            st.success("Data added to Grist table")
+        
+        #Button to add questions Google spreadsheet
+
+        #if st.button("Ajouter", key=10):
+        #    st.session_state.data['profile_type'].append(profile_type)
+        #    st.session_state.data['question'].append(question)
+        #    st.session_state.data['answer'].append(answer)
+        #    st.session_state.data['score'].append(score)
+        #    # Combine the existing data from Google Sheets and new data
+        #    existing_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
+        #    existing_df = pd.DataFrame(existing_data)
+        #    #st.write("Existing Data:")
+        #    #st.dataframe(existing_df)
+        #    new_df = pd.DataFrame(st.session_state.data)
+        #    #st.write("New Data:")
+        #    #st.dataframe(new_df)
+        #    combined_df = pd.concat([existing_df, new_df], ignore_index=True)
+        #    #st.write("Combined Data:")
+        #    #st.dataframe(combined_df)
+        #    conn.update(worksheet="Colorizer", data=combined_df)
+        #    st.success("Data added to Google Sheets")
+        #    st.session_state.data = {
+        #        'profile_type': [],
+        #        'question': [],
+        #        'answer': [],
+        #        'score': []
+        #    }
 
     
     with col2:
