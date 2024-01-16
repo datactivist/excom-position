@@ -104,6 +104,25 @@ if response.status_code == 200:
 else:
     print(f"Request failed with status code {response.status_code}")
 
+#Chargement du questionnaire vierge correspondant à "Form0"
+subdomain = "docs"
+doc_id = "nSV5r7CLQCWzKqZCz7qBor"
+table_id = "Form0"
+
+
+# Construct the URL using the provided variables
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+response = requests.get(url, headers=headers)
+
+# Check the response status code
+if response.status_code == 200:
+    data0 = response.json()
+    columns = data0['records'][0]['fields'].keys()
+    print(list(columns)[0])
+    # Process the data as needed
+else:
+    print(f"Request failed with status code {response.status_code}")
+
 
 # Specify the primary menu definition
 menu_data = [
@@ -211,7 +230,7 @@ def colorizer_tab():
         if st.button("Ajouter", key=78):
             # Add the input values to Grist table
             add_data_to_grist_table(profile_type, question, reponse, score)
-            
+            st.session_state.selected_data = data0
             st.success("Data added to Grist table")
         
         #Button to add questions Google spreadsheet
