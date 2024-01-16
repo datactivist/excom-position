@@ -120,6 +120,7 @@ def colorizer_tab():
     st.title("Table de qualification des profils data")
     if st.button("Charger le data position", type="primary", key=100):
         st.session_state.selected_data = data2
+        st.success("Data position chargé 🚚")
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
     st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
