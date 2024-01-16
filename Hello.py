@@ -64,6 +64,7 @@ headers = {
     "Authorization": f"Bearer {api_key}"
 }
 
+#Chargement du questionnaire 1 correspondant à "Form2"
 subdomain = "docs"
 doc_id = "nSV5r7CLQCWzKqZCz7qBor"
 table_id = "Form2"
@@ -76,6 +77,26 @@ response = requests.get(url, headers=headers)
 # Check the response status code
 if response.status_code == 200:
     data = response.json()
+    print("Houra")
+    columns = data['records'][0]['fields'].keys()
+    print(list(columns)[0])
+    # Process the data as needed
+else:
+    print(f"Request failed with status code {response.status_code}")
+
+#Chargement du questionnaire 2 correspondant à "Form3"
+subdomain = "docs"
+doc_id = "nSV5r7CLQCWzKqZCz7qBor"
+table_id = "Form3"
+
+
+# Construct the URL using the provided variables
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+response = requests.get(url, headers=headers)
+
+# Check the response status code
+if response.status_code == 200:
+    data2 = response.json()
     print("Houra")
     columns = data['records'][0]['fields'].keys()
     print(list(columns)[0])
@@ -112,7 +133,9 @@ def colorizer_tab():
             st.text("Data Position Maitre")
             expander = st.expander("Description")
             expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=1)
+            if st.button("Charger le data position",type="primary", key=1):
+                data = data2
+                st.write("Houra")
         with st.container(border=True):
             st.text("Data Position Expert")
             expander = st.expander("Description")
@@ -213,7 +236,7 @@ def gatherizer_tab():
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     #create an empty dataframe
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
-    
+    st.write(data)
     #turn the json "data" into a dataframe
     grist_question_df = pd.json_normalize(data['records'])
     print(grist_question_df)
