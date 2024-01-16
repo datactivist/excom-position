@@ -118,9 +118,6 @@ if 'selected_tab' not in st.session_state:
 
 def colorizer_tab():
     st.title("Table de qualification des profils data")
-    if st.button("Charger le data position", type="primary", key=100):
-        st.session_state.selected_data = data2
-        st.success("Data position chargé 🚚")
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
     st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
@@ -135,12 +132,15 @@ def colorizer_tab():
             expander = st.expander("Description")
             expander.write("Hello")
             if st.button("Charger le data position",type="primary", key=1):
-                st.write("Houra")
+                st.session_state.selected_data = data2
+                st.success("Data position chargé 🚚")
         with st.container(border=True):
-            st.text("Data Position Expert")
+            st.text("Data Position pour Hackathon")
             expander = st.expander("Description")
             expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=2)
+            if st.button("Charger le data position",type="primary", key=2):
+                st.session_state.selected_data = data
+                st.success("Data position chargé 🚚")
         with st.container(border=True):
             st.text("k")
             expander = st.expander("Description")
