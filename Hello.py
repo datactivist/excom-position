@@ -240,21 +240,21 @@ def gatherizer_tab():
         st.warning("Please select data in the Colorizer tab first.")
         return
 
-    st.write(st.session_state.selected_data)
+    #st.write(st.session_state.selected_data)
     
     
     #create an empty dataframe
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
-    st.write(data)
+    #st.write(data)
     #turn the json "data" into a dataframe
     grist_question_df = pd.json_normalize(st.session_state.selected_data['records'])
-    print(grist_question_df)
+    #print(grist_question_df)
     
     # Add content from the Grist database
     
     #grist_question_df = pd.DataFrame(data['records'])
     grist_question_df.columns = [col.replace('fields.', '') for col in grist_question_df.columns]
-    st.write(grist_question_df)
+    #st.write(grist_question_df)
     
     # Add content from the google spreadsheet 
     question_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
