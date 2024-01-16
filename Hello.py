@@ -98,7 +98,7 @@ response = requests.get(url, headers=headers)
 if response.status_code == 200:
     data2 = response.json()
     print("Houra")
-    columns = data['records'][0]['fields'].keys()
+    columns = data2['records'][0]['fields'].keys()
     print(list(columns)[0])
     # Process the data as needed
 else:
