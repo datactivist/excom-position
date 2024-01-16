@@ -134,6 +134,7 @@ def colorizer_tab():
             expander = st.expander("Description")
             expander.write("Hello")
             if st.button("Charger le data position",type="primary", key=1):
+                global data
                 data = data2
                 st.write("Houra")
         with st.container(border=True):
