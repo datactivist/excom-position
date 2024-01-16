@@ -71,7 +71,7 @@ if 'selected_tab' not in st.session_state:
 
 def colorizer_tab():
     st.title("Table de qualification des profils data")
-    if st.button("Charger le data position", type="primary", key=1):
+    if st.button("Charger le data position", type="primary", key=100):
             charger_data_position()
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 

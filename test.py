@@ -1,28 +1,45 @@
-from grist_api import GristDocAPI
-import os
-import streamlit as st
+import requests
 
-SERVER = "https://docs.getgrist.com"
-DOC_ID = "nSV5r7CLQCWzKqZCz7qBor"
-API_KEY = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
+api_key = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
 
-# Initialize GristDocAPI with document ID, server, and API key
-api = GristDocAPI(DOC_ID, server=SERVER, api_key=API_KEY)
+headers = {
+    "Authorization": f"Bearer {api_key}"
+}
 
-# Fetch data from the "Form2" table
-data = api.fetch_table("Form2")
-print(data)
+subdomain = "docs"
+doc_id = "nSV5r7CLQCWzKqZCz7qBor"
+table_id = "Form2"
 
 
-# Funcon to load data from Grist
-def charger_data_position():
-    # Example: Fetch all rows from the "Form2" table
-    data = api.fetch_table('Form2')
-    
-    # Display the data in Streamlit
-    st.write("Loaded Data:")
-    st.write(data)
+# Construct the URL using the provided variables
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
 
-# Button to trigger the data loading
-if st.button("Charger le data position", type="primary", key=1):
-    charger_data_position()
+response = requests.get(url, headers=headers)
+
+# Check the response status code
+if response.status_code == 200:
+    data = response.json()
+    print("Houra")
+    columns = data['records'][0]['fields'].keys()
+    print(list(columns)[0])
+    # Process the data as needed
+else:
+    print(f"Request failed with status code {response.status_code}")
+
+
+
+
+
+
+
+# Send a GET request to the constructed URL
+response = requests.get(url)
+
+# Check the response status code
+if response.status_code == 200:
+    # Request was successful
+    data = response.json()  # Get the response data in JSON format
+    # Process the data as needed
+else:
+    # Request failed
+    print(f"Request failed with status code {response.status_code}")
