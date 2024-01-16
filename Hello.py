@@ -294,8 +294,8 @@ def gatherizer_tab():
     #st.write(grist_question_df)
     
     # Add content from the google spreadsheet 
-    question_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
-    spreadsheet_question_df = pd.DataFrame(question_data)
+    #question_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
+    #spreadsheet_question_df = pd.DataFrame(question_data)
     
    
     
@@ -321,7 +321,8 @@ def gatherizer_tab():
 
         #st.dataframe(df)
     if st.button("Je valide"):
-        conn.update(worksheet="Gatherizer", data=df_answers)
+        add_answers_to_grist_table(df_answers)
+        #conn.update(worksheet="Gatherizer", data=df_answers)
         st.success("Bien reçu ! A bientôt <3")
     
     # Now, outside the loop, you can display the complete df_answers DataFrame
