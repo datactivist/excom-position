@@ -351,6 +351,7 @@ def gatherizer_tab():
     
     #create a function to add the answers to the st.session_state
     def add_answers_to_grist_table(df_answers, table_id):
+        st.dataframe(df_answers)
         # Convert the "score" and "profile_type" columns to a more suitable data type (e.g., list)
         df_answers["score"] = df_answers["score"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
         df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
