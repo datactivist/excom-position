@@ -308,7 +308,7 @@ def gatherizer_tab():
     #spreadsheet_question_df = pd.DataFrame(question_data)
     
    
-    
+    grist_question_df = grist_question_df 
     ## from the data, select the unique questions
     unique_questions = grist_question_df.question.unique()
     
