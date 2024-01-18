@@ -324,7 +324,7 @@ def gatherizer_tab():
     ## for each question, display the question and the possible answers
     for question_people in unique_questions:
         st.write(question_people)
-        answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].reponse, index=None)
+        answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].reponse, index=None, key = 134)
         score = grist_question_df[grist_question_df.reponse == answer_people].score.values
         profile_type_val = grist_question_df[grist_question_df.reponse == answer_people].profile_type.values
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'reponse': [answer_people],'score': [score],'profile_type':[profile_type_val]})
