@@ -355,8 +355,8 @@ def gatherizer_tab():
         df_answers["score"] = df_answers["score"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
         df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
 
-        # Fill any NaN values in the DataFrame with appropriate defaults
-        df_answers = df_answers.fillna(value = None)
+        # Fill NaN values with None for all columns
+        df_answers = df_answers.where(pd.notna(), None)
         
         st.write(str(table_id))
         
