@@ -375,6 +375,7 @@ def gatherizer_tab():
         
         
         response = requests.post(url, headers=headers, json=data)
+        st.write(response)
         st.write(response.text)
         
     print("The last table id" + str(st.session_state.table_id))
