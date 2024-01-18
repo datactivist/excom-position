@@ -294,7 +294,7 @@ def gatherizer_tab():
     
     
     ## create an empty dataframe to store the answers
-    df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
+    df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'reponse', 'score','profile_type'])
     
     ## if grist was used, transform the json file into a dataframe
     grist_question_df = pd.json_normalize(st.session_state.selected_data['records'])
