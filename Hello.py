@@ -358,6 +358,7 @@ def gatherizer_tab():
         # Fill any NaN values in the DataFrame with appropriate defaults
         df_answers = df_answers.fillna({'nom': '', 'prenom': '', 'mail': '', 'question': '', 'answer': '', 'score': None, 'profile_type': None})
         st.write(str(table_id))
+        
         # Convert DataFrame to list of records
         records = [{"fields": record} for record in df_answers.to_dict(orient='records')]
         st.write(records)
