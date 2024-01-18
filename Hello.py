@@ -22,12 +22,14 @@ import requests
 ### json to transform json files returned by the Grist API into a dataframe
 import json
 import streamlit as st
+import numpy as np
+import json
 
 # Le héros, un valeureux programmeur, maniait son clavier comme une épée..
 #...naviguant entre les méandres de GSheets et les terres inexplorées de Streamlit.
 
 
-# Set the page title and favicon of the app
+## Set the page title and favicon of the app
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
 custom_html = """
 <div class="banner">
@@ -51,38 +53,34 @@ custom_html = """
 </style>
 """
 
-# Display the custom HTML
+## Display the custom HTML
 st.components.v1.html(custom_html)
 
-# Set up the Google Sheets connection in case the user wants to handle its Data Position from a google sheet
+## Set up the Google Sheets connection in case the user wants to handle its Data Position from a google sheet
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-# Set up the Grist API connection in case the user wants to handle its Data Position from a Grist database
+## Set up the Grist API connection in case the user wants to handle its Data Position from a Grist database
 SERVER = "https://docs.getgrist.com"
 DOC_ID = "nSV5r7CLQCWzKqZCz7qBor"
 API_KEY = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
 
-# Initialize GristDocAPI with document ID, server, and API key
+## Initialize GristDocAPI with document ID, server, and API key
 api = GristDocAPI(DOC_ID, server=SERVER, api_key=API_KEY)
 
-#Load the data from Grist
-api_key = st.secrets["grist_api_key"]
+## Load the data from Grist
+#api_key = st.secrets["grist_api_key"]
+api_key = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
 
 headers = {
     "Authorization": f"Bearer {api_key}"
 }
 
-#Chargement du questionnaire 1 correspondant à "Form2"
+## Load Form2 from Grist
 subdomain = "docs"
 doc_id = "nSV5r7CLQCWzKqZCz7qBor"
-table_id = "Form2"
-
-
-# Construct the URL using the provided variables
-url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+table_id_2 = "Form2"
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id_2}/records"
 response = requests.get(url, headers=headers)
-
-# Check the response status code
 if response.status_code == 200:
     data = response.json()
     print("Houra")
@@ -92,17 +90,12 @@ if response.status_code == 200:
 else:
     print(f"Request failed with status code {response.status_code}")
 
-#Chargement du questionnaire 2 correspondant à "Form3"
+## Load Form3 from Grist
 subdomain = "docs"
 doc_id = "nSV5r7CLQCWzKqZCz7qBor"
-table_id = "Form3"
-
-
-# Construct the URL using the provided variables
-url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+table_id_3 = "Form3"
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id_3}/records"
 response = requests.get(url, headers=headers)
-
-# Check the response status code
 if response.status_code == 200:
     data2 = response.json()
     print("Houra")
@@ -112,17 +105,12 @@ if response.status_code == 200:
 else:
     print(f"Request failed with status code {response.status_code}")
 
-#Chargement du questionnaire vierge correspondant à "Form0"
+## Load Form0 from Grist
 subdomain = "docs"
 doc_id = "nSV5r7CLQCWzKqZCz7qBor"
-table_id = "Form0"
-
-
-# Construct the URL using the provided variables
-url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+table_id_0 = "Form0"
+url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id_0}/records"
 response = requests.get(url, headers=headers)
-
-# Check the response status code
 if response.status_code == 200:
     data0 = response.json()
     columns = data0['records'][0]['fields'].keys()
@@ -132,20 +120,22 @@ else:
     print(f"Request failed with status code {response.status_code}")
 
 
-# Specify the primary menu definition
+## generate the different tabs of the app
 menu_data = [
     {'icon': "far fa-copy", 'label': "Qualification"},
     {'icon': "far fa-copy", 'label': "Recrutement"},
     {'icon': "far fa-copy", 'label': "Position"},
 ]
 
-# Initialize session state
+## Set the default tab of the app to "Qualification"
 if 'selected_tab' not in st.session_state:
     st.session_state.selected_tab = "Qualification"
 
 # La mission était claire : sauver le royaume des données...
 # ...en recrutant les profils data les plus qualifiés.
 
+
+## Create a tab to add the answers to the database
 def colorizer_tab():
     st.title("Table de qualification des profils data")
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
@@ -156,6 +146,8 @@ def colorizer_tab():
     
     st.header("Liste des questionnaires de la communauté")
     col1, col2, col3 = st.columns(3)
+    
+    # Create elements with the different data positions that can be used
     with col1:
         with st.container(border=True):
             st.text("Data Position Maitre")
@@ -163,6 +155,7 @@ def colorizer_tab():
             expander.write("Hello")
             if st.button("Charger le data position",type="primary", key=1):
                 st.session_state.selected_data = data2
+                st.session_state.table_id = table_id_3
                 st.success("Data position chargé 🚚")
         with st.container(border=True):
             st.text("Data Position pour Hackathon")
@@ -170,6 +163,7 @@ def colorizer_tab():
             expander.write("Hello")
             if st.button("Charger le data position",type="primary", key=2):
                 st.session_state.selected_data = data
+                st.session_state.table_id = table_id_2
                 st.success("Data position chargé 🚚")
         with st.container(border=True):
             st.text("k")
@@ -212,7 +206,8 @@ def colorizer_tab():
 
 
     col1, col2 = st.columns(2)
-
+    
+    ## Create a storage where the data will be stored dynamically
     if 'data' not in st.session_state:
         st.session_state.data = {
             'profile_type':[],
@@ -222,7 +217,8 @@ def colorizer_tab():
         }
 # Tandis que le programmeur avançait, les énigmes se dressaient sur son chemin. 
 # Des questions sur les compétences, des réponses à choisir, des niveaux de maîtrise à déterminer. Chaque ligne de code était une bataille, chaque requête une épreuve.
-
+    
+    ## Create the form to add questions to the Grist table
     with col1:
         st.header('Ma :blue[table] :sunglasses:')
         profile_type = st.text_input("Le profil")
@@ -233,6 +229,7 @@ def colorizer_tab():
         # Le héros se heurta à une forteresse appelée Grist API, où des clés secrètes ouvraient les portes des données convoitées. 
         # Les réponses étaient extraites, les colonnes alignées, et le programmeur se fraya un chemin à travers le labyrinthe des requêtes HTTP.
         
+        ## Create a function to add the answers to the Grist table
         def add_data_to_grist_table(profile_type, question, reponse, score):
             # Create a new row with the provided data
             new_records = [
@@ -242,14 +239,15 @@ def colorizer_tab():
             # Use the Grist API to add the new row to the Grist table
             api.add_records('Form0', new_records)
         
-        #Button to add questions to Grist
+        ## Button to add questions to Grist
         if st.button("Ajouter", key=78):
             # Add the input values to Grist table
             add_data_to_grist_table(profile_type, question, reponse, score)
             st.session_state.selected_data = data0
+            st.session_state.table_id = table_id_0
             st.success("Data added to Grist table")
         
-        #Button to add questions Google spreadsheet
+        ## Button to add questions Google spreadsheet
 
         #if st.button("Ajouter", key=10):
         #    st.session_state.data['profile_type'].append(profile_type)
@@ -278,45 +276,43 @@ def colorizer_tab():
 
     
     with col2:
+        ## display an image with inspiration for the question that can be asked
         st.header(':blue[Inspiration] :star-struck:')
         st.image("resource/skills_framework.png")
          
                     
-
+## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
-    #st.image('resource/logo_forge.png', width=400, use_column_width=True)
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     
-    # Check if selected data is available in session_state
+    ## Check if there are data available loaded
     if 'selected_data' not in st.session_state:
         st.warning("Please select data in the Colorizer tab first.")
         return
 
-    #st.write(st.session_state.selected_data)
     
     
-    #create an empty dataframe
+    ## create an empty dataframe to store the answers
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'answer', 'score','profile_type'])
-    #st.write(data)
-    #turn the json "data" into a dataframe
+    
+    ## if grist was used, transform the json file into a dataframe
     grist_question_df = pd.json_normalize(st.session_state.selected_data['records'])
-    #print(grist_question_df)
     
-    # Add content from the Grist database
-    
-    #grist_question_df = pd.DataFrame(data['records'])
+    ## clean the column names to display them in a nice way in the app
     grist_question_df.columns = [col.replace('fields.', '') for col in grist_question_df.columns]
-    #st.write(grist_question_df)
     
-    # Add content from the google spreadsheet 
+    
+    ## If google spreadsheet was chosen, add content from the google spreadsheet 
     #question_data = conn.read(worksheet="Colorizer", usecols=["question","answer","score","profile_type"],ttl=0, nrows=10)
     #spreadsheet_question_df = pd.DataFrame(question_data)
     
    
     
-    #st.write(question_df.profile_type.values)
+    ## from the data, select the unique questions
     unique_questions = grist_question_df.question.unique()
+    
+    ## create a form to gather the answers from the population
     st.header("Qui êtes-vous ? :disguised_face:")
     nom = st.text_input("Nom", key='nom')
     prenom = st.text_input("Prenom", key='prenom')
@@ -325,7 +321,7 @@ def gatherizer_tab():
     df_answers = df_answers.append({'nom': nom, 'prenom': prenom, 'mail': mail}, ignore_index=True)
     st.header("Parlons de vous (et de data) :floppy_disk: ")
 
-
+    ## for each question, display the question and the possible answers
     for question_people in unique_questions:
         st.write(question_people)
         answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].reponse, index=None)
@@ -334,12 +330,73 @@ def gatherizer_tab():
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'answer': [answer_people],'score': [score],'profile_type':[profile_type_val]})
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
+    
+    print(st.session_state)
+    print(df_answers)
+    
+   #  
+   ## get the names of the tables inside Grist
+    subdomain = "docs"
+    doc_id = "nSV5r7CLQCWzKqZCz7qBor"
+    table_id = "Form3"
+    url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables"
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        tables = response.json()
+        # get the names of the tables
+        for table in tables["tables"]:
+            print(table['id'])
+    else:
+        print(f"Request failed with status code {response.status_code}")
+    
+    #create a function to add the answers to the st.session_state
+    def add_answers_to_grist_table(df_answers, table_id):
+        # Convert numpy arrays to Python lists in the DataFrame
+        df_answers = df_answers.applymap(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
 
-        #st.dataframe(df)
+        # Convert the DataFrame to a dictionary
+        answers_dict = df_answers.iloc[0].to_dict()
+
+        # Create a new record with the provided data
+        new_record = {
+            'fields': {
+                'nom': answers_dict['nom'],
+                'prenom': answers_dict['prenom'],
+                'mail': answers_dict['mail'],
+                'question': answers_dict['question'],
+                'answer': answers_dict['answer'],
+                'score': answers_dict['score'],
+                'profile_type': answers_dict['profile_type']
+            }
+        }
+
+        # Create the payload for the POST request
+        payload = {
+            "records": [new_record]
+        }
+
+        # Convert the payload to JSON format
+        payload_json = json.dumps(payload)
+        print(payload_json)
+        
+        docId = "nSV5r7CLQCWzKqZCz7qBor"
+        tableId = table_id
+
+        # Use the Grist API to add the new rows to the specified Grist table
+        url = f"https://{subdomain}.getgrist.com/api/docs/{docId}/tables/{tableId}/records"
+        response = requests.post(url, headers=headers, data=payload_json)
+
+        # Process the response as needed
+        print(response)
+        
+    print("The last table id" + str(st.session_state.table_id))
+    
+    ## Create a button to add the answers to the Grist table
     if st.button("Je valide"):
-        add_answers_to_grist_table(df_answers)
+        add_answers_to_grist_table(df_answers, st.session_state.table_id)
         #conn.update(worksheet="Gatherizer", data=df_answers)
         st.success("Bien reçu ! A bientôt <3")
+    
     
     # Now, outside the loop, you can display the complete df_answers DataFrame
     #st.dataframe(df_answers)
