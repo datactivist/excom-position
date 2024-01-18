@@ -291,7 +291,7 @@ def gatherizer_tab():
         st.warning("Please select data in the Colorizer tab first.")
         return
 
-    
+    st.write(st.session_state.selected_data['records'])
     
     ## create an empty dataframe to store the answers
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'reponse', 'score','profile_type'])
