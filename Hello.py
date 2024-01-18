@@ -356,7 +356,8 @@ def gatherizer_tab():
         df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
 
         # Fill any NaN values in the DataFrame with appropriate defaults
-        df_answers = df_answers.fillna({'nom': ' ', 'prenom': ' ', 'mail': ' ', 'question': ' ', 'answer': ' ', 'score': None, 'profile_type': None})
+        df_answers = df_answers.fillna({'nom': '0', 'prenom': '0', 'mail': '0', 'question': '0', 'answer': '0', 'score': None, 'profile_type': None})
+        
         st.write(str(table_id))
         
         # Convert DataFrame to list of records
