@@ -351,10 +351,16 @@ def gatherizer_tab():
     
     #create a function to add the answers to the st.session_state
     def add_answers_to_grist_table(df_answers, table_id):
+        # Convert the "score" and "profile_type" columns to a more suitable data type (e.g., list)
+        df_answers["score"] = df_answers["score"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
+        df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
+
+        # Fill any NaN values in the DataFrame with appropriate defaults
+        df_answers = df_answers.fillna({'nom': '', 'prenom': '', 'mail': '', 'question': '', 'answer': '', 'score': None, 'profile_type': None})
         st.write(str(table_id))
         # Convert DataFrame to list of records
         records = [{"fields": record} for record in df_answers.to_dict(orient='records')]
-        
+        st.write(records)
         # Prepare the request body
         data = {"records": records}
         st.write(data)
@@ -364,7 +370,7 @@ def gatherizer_tab():
         # Use the Grist API to add the new rows to the specified Grist table
         url = f"https://{subdomain}.getgrist.com/api/docs/{docId}/tables/{tableId}/records"
         st.write(url)
-        print(url)
+        
         
         response = requests.post(url, headers=headers, json=data)
         st.write(response.text)
