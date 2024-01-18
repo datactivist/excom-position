@@ -1,17 +1,33 @@
-# streamlit_app.py
-import pandas as pd
-import streamlit as st
-from streamlit_gsheets import GSheetsConnection
-import hydralit_components as hc
-import datetime
-from streamlit_image_coordinates import streamlit_image_coordinates
-from streamlit_elements import nivo, elements, mui, html
-from grist_api import GristDocAPI
-import os
-import requests
-import json
 
-# Make it look nice from the start
+# Le vent glacial s'engouffrait dans le code balayant les lignes de pandas et les colonnes de Streamlit. 
+# C'était une nuit sombre dans le monde virtuel de Forge Data, où les profils data se dissimulaient dans l'ombre du code.
+
+
+## Import the required tool (libraries) to build the app
+
+### pandas for data manipulation
+import pandas as pd
+### streamlit for the app
+import streamlit as st
+### streamlit_gsheets so to connect the app Google Sheets
+from streamlit_gsheets import GSheetsConnection
+### hydralit to display a nice navigation bar
+import hydralit_components as hc
+### streamlit_elements to display the radar graph where the position of individuals will be displayed
+from streamlit_elements import nivo, elements, mui, html
+### Grist API so to connect the app to a Grist database
+from grist_api import GristDocAPI
+### requests to use the Grist API
+import requests
+### json to transform json files returned by the Grist API into a dataframe
+import json
+import streamlit as st
+
+# Le héros, un valeureux programmeur, maniait son clavier comme une épée..
+#...naviguant entre les méandres de GSheets et les terres inexplorées de Streamlit.
+
+
+# Set the page title and favicon of the app
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
 custom_html = """
 <div class="banner">
@@ -34,13 +50,14 @@ custom_html = """
     }
 </style>
 """
+
 # Display the custom HTML
 st.components.v1.html(custom_html)
 
-# Create a connection object.
+# Set up the Google Sheets connection in case the user wants to handle its Data Position from a google sheet
 conn = st.connection("gsheets", type=GSheetsConnection)
 
-#Set up the Grist API
+# Set up the Grist API connection in case the user wants to handle its Data Position from a Grist database
 SERVER = "https://docs.getgrist.com"
 DOC_ID = "nSV5r7CLQCWzKqZCz7qBor"
 API_KEY = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
@@ -48,17 +65,8 @@ API_KEY = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
 # Initialize GristDocAPI with document ID, server, and API key
 api = GristDocAPI(DOC_ID, server=SERVER, api_key=API_KEY)
 
-#Function to load Grist data
-def charger_data_position():
-    # Example: Fetch all rows from the "Form2" table
-    data = api.fetch_table('Form2')
-    
-    # Display the data in Streamlit
-    st.write("Loaded Data:")
-    st.write(data)
-
 #Load the data from Grist
-api_key = "3a00dc02645f6f36f4e1c9449dd4a8529b5e9149"
+api_key = st.secrets["grist_api_key"]
 
 headers = {
     "Authorization": f"Bearer {api_key}"
@@ -135,6 +143,9 @@ menu_data = [
 if 'selected_tab' not in st.session_state:
     st.session_state.selected_tab = "Qualification"
 
+# La mission était claire : sauver le royaume des données...
+# ...en recrutant les profils data les plus qualifiés.
+
 def colorizer_tab():
     st.title("Table de qualification des profils data")
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
@@ -209,6 +220,8 @@ def colorizer_tab():
             'answer': [],
             'score': []
         }
+# Tandis que le programmeur avançait, les énigmes se dressaient sur son chemin. 
+# Des questions sur les compétences, des réponses à choisir, des niveaux de maîtrise à déterminer. Chaque ligne de code était une bataille, chaque requête une épreuve.
 
     with col1:
         st.header('Ma :blue[table] :sunglasses:')
@@ -216,6 +229,9 @@ def colorizer_tab():
         question = st.text_input("La question")
         reponse = st.text_input("Une réponse possible")
         score = st.selectbox("Le niveau de maitrise associé", [1, 2, 3, 4])
+        
+        # Le héros se heurta à une forteresse appelée Grist API, où des clés secrètes ouvraient les portes des données convoitées. 
+        # Les réponses étaient extraites, les colonnes alignées, et le programmeur se fraya un chemin à travers le labyrinthe des requêtes HTTP.
         
         def add_data_to_grist_table(profile_type, question, reponse, score):
             # Create a new row with the provided data
@@ -328,6 +344,8 @@ def gatherizer_tab():
     # Now, outside the loop, you can display the complete df_answers DataFrame
     #st.dataframe(df_answers)
     
+# Le vent souffla plus fort alors que le programmeur invoquait le puissant radar graph pour analyser la distribution des profils. 
+# Des profils émergeaient, formant des constellations dans le ciel de données.
 
 def dispenser_tab():
     st.header("Position des profils")
@@ -406,7 +424,9 @@ def dispenser_tab():
                     }
                 }
             )
-    
+# Mais la quête n'était pas terminée. Le héros se plongea dans la création des groupes, attribuant des profils à des cohortes spécifiques. 
+# Le tableau se transforma en un champ de bataille stratégique, où chaque programmeur était assigné à sa place.
+
     #create a df that is form_data df but group by name
     form_data = form_data[form_data['score'].notna()]
     form_data['score'] = form_data['score'].str.strip('[]').astype(int)
@@ -471,3 +491,6 @@ if selected_tab_label != st.session_state.selected_tab:
 # Get the id of the menu item clicked
 #st.info(f"Selected tab: {selected_tab_label}")
 #st.info(f"Menu {menu_id}")
+
+# Et ainsi se termina cette saga épique, où le codeur du monde virtuel triompha des énigmes, manipula les données et forgea un chemin vers la victoire. 
+# Un conte de programmation, où chaque ligne de code était une ligne de l'histoire, tissée dans le tissu du royaume virtuel.
