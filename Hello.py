@@ -351,43 +351,23 @@ def gatherizer_tab():
     
     #create a function to add the answers to the st.session_state
     def add_answers_to_grist_table(df_answers, table_id):
-        # Convert numpy arrays to Python lists in the DataFrame
-        df_answers = df_answers.applymap(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
-
-        # Convert the DataFrame to a dictionary
-        answers_dict = df_answers.iloc[0].to_dict()
-
-        # Create a new record with the provided data
-        new_record = {
-            'fields': {
-                'nom': answers_dict['nom'],
-                'prenom': answers_dict['prenom'],
-                'mail': answers_dict['mail'],
-                'question': answers_dict['question'],
-                'answer': answers_dict['answer'],
-                'score': answers_dict['score'],
-                'profile_type': answers_dict['profile_type']
-            }
-        }
-
-        # Create the payload for the POST request
-        payload = {
-            "records": [new_record]
-        }
-
-        # Convert the payload to JSON format
-        payload_json = json.dumps(payload)
-        print(payload_json)
+        st.write(str(table_id))
+        # Convert DataFrame to list of records
+        records = [{"fields": record} for record in df_answers.to_dict(orient='records')]
         
+        # Prepare the request body
+        data = {"records": records}
+        st.write(data)
         docId = "nSV5r7CLQCWzKqZCz7qBor"
         tableId = table_id
 
         # Use the Grist API to add the new rows to the specified Grist table
         url = f"https://{subdomain}.getgrist.com/api/docs/{docId}/tables/{tableId}/records"
-        response = requests.post(url, headers=headers, data=payload_json)
-
-        # Process the response as needed
-        print(response)
+        st.write(url)
+        print(url)
+        
+        response = requests.post(url, headers=headers, data=data)
+        st.write(response.text)
         
     print("The last table id" + str(st.session_state.table_id))
     
