@@ -247,7 +247,14 @@ def colorizer_tab():
 
             # Add the input values to Grist table
             add_data_to_grist_table(profile_type, question, reponse, score)
-            st.session_state.selected_data = pd.DataFrame(columns=['profile_type', 'question', 'reponse', 'score'])
+            new_data = pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})
+            
+            if 'selected_data' not in st.session_state:
+                st.session_state.selected_data = new_data
+            else:
+                st.session_state.selected_data = pd.concat([st.session_state.selected_data, new_data], ignore_index=True)
+
+            
             st.session_state.selected_data = pd.concat([st.session_state.selected_data, pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})], ignore_index=True)
             json_records = st.session_state.selected_data.to_dict(orient='records')
             json_data = {'records': json_records}
