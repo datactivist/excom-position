@@ -302,7 +302,6 @@ def gatherizer_tab():
         
         df_colorizer = st.session_state.colorizer_data
         st.session_state.selected_data = df_colorizer
-        st.session_state.table_id = table_id_0
         st.success("Données chargées depuis le DataFrame de session")
 
     
