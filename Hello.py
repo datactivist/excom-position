@@ -244,25 +244,16 @@ def colorizer_tab():
         ## Button to add questions to Grist
         print(st.session_state.data)
         if st.button("Ajouter", key=78):
-            print(st.session_state.data)
-            st.session_state.data['profile_type'].append(profile_type)
-            st.session_state.data['question'].append(question)
-            st.session_state.data['reponse'].append(reponse)
-            st.session_state.data['score'].append(score)
-            
-            #Add the input to a temporary dataframe
-            df_colorizer = pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})
-            print(df_colorizer.head())
-            
-            #combine the temporary dataframe with the existing grist data
-            
 
             # Add the input values to Grist table
             add_data_to_grist_table(profile_type, question, reponse, score)
             st.session_state.selected_data = data0
             st.session_state.table_id = table_id_0
             st.success("Data added to Grist table")
-        
+            
+            if 'colorizer_data' not in st.session_state:
+                st.session_state.colorizer_data = pd.DataFrame(columns=['profile_type', 'question', 'reponse', 'score'])
+            st.session_state.colorizer_data = pd.concat([st.session_state.colorizer_data, pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})], ignore_index=True)        
         ## Button to add questions Google spreadsheet
 
         #if st.button("Ajouter", key=10):
@@ -306,6 +297,11 @@ def gatherizer_tab():
     if 'selected_data' not in st.session_state:
         st.warning("Please select data in the Colorizer tab first.")
         return
+    if 'colorizer_data' in st.session_state:
+        df_colorizer = st.session_state.colorizer_data
+        st.session_state.selected_data = df_colorizer
+        st.session_state.table_id = table_id_0
+        st.success("Données chargées depuis le DataFrame de session")
 
     st.write(st.session_state.selected_data['records'])
     
