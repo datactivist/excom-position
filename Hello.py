@@ -135,9 +135,17 @@ if 'selected_tab' not in st.session_state:
 # La mission était claire : sauver le royaume des données...
 # ...en recrutant les profils data les plus qualifiés.
 
+if 'selected_data' not in st.session_state:
+        st.session_state.selected_data = {
+            'profile_type':[],
+            'question': [],
+            'reponse': [],
+            'score': []
+        } 
 
 ## Create a tab to add the answers to the database
 def colorizer_tab():
+    st.write(st.session_state.selected_data)
     st.title("Table de qualification des profils data")
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
@@ -252,10 +260,11 @@ def colorizer_tab():
         #print(st.session_state.data)
         
         if st.button("Ajouter", key=78):
-            st.session_state.data['profile_type'].append(profile_type)
-            st.session_state.data['question'].append(question)
-            st.session_state.data['reponse'].append(reponse)
-            st.session_state.data['score'].append(score)
+            st.session_state.selected_data['profile_type'].append(profile_type)
+            st.session_state.selected_data['question'].append(question)
+            st.session_state.selected_data['reponse'].append(reponse)
+            st.session_state.selected_data['score'].append(score)
+            
 
             # Add the input values to Grist table
             existing_data = data0
@@ -263,10 +272,10 @@ def colorizer_tab():
             records = existing_data['records']
             formatted_data = [{'id': record['id'], **record['fields']} for record in records]
             existing_data = pd.DataFrame(formatted_data)
-            new_df = pd.DataFrame(st.session_state.data)
-            print(new_df)
+            new_df = pd.DataFrame(st.session_state.selected_data)
+            #print(new_df)
             combined_df = pd.concat([existing_data, new_df], ignore_index=True)
-            print(combined_df)
+            #print(combined_df)
             
             # Convertir le DataFrame en dictionnaire
             data_dict = combined_df.to_dict(orient='records')
@@ -275,7 +284,8 @@ def colorizer_tab():
             formatted_data = {'records': [{'id': record['id'], 'fields': {k: record[k] for k in record if k != 'id'}} for record in data_dict]}
 
             # Affichage du résultat
-            print("hello")
+            #print("hello")
+            print("Les données avant")
             print(formatted_data)
             
             add_data_to_grist_table(profile_type, question, reponse, score)
@@ -286,7 +296,11 @@ def colorizer_tab():
                 'reponse': [],
                 'score': []
             }
-            st.session_state.selected_data = data0
+            
+        
+            st.session_state.selected_data = formatted_data
+            
+        
             st.session_state.table_id = table_id_0
             st.success("Data added to Grist table")
             
@@ -336,6 +350,10 @@ def colorizer_tab():
         #        'answer': [],
         #        'score': []
         #    }
+    
+     
+        
+    
 
     
     with col2:
@@ -346,8 +364,8 @@ def colorizer_tab():
                     
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
+    st.write(st.session_state.selected_data)
     #print(st.session_state.table_id)
-    #print(st.session_state.selected_data)
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     
@@ -356,7 +374,7 @@ def gatherizer_tab():
     if 'selected_data' not in st.session_state:
         st.warning("Please select data in the Colorizer tab first.")
         return
-    
+    #print(st.session_state.selected_data)
     #if 'colorizer_data' in st.session_state:
     #    
     #    df_colorizer = st.session_state.colorizer_data
@@ -367,16 +385,17 @@ def gatherizer_tab():
     
     ## create an empty dataframe to store the answers
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'reponse', 'score','profile_type'])
-    
+    print("Les données après")
+    print(st.session_state.selected_data)
     ## if grist was used, transform the json file into a dataframe
     grist_question_df = st.session_state.selected_data
-    print(grist_question_df['records'])
+    #print(grist_question_df['records'])
     records = grist_question_df['records']
     grist_question_df = pd.json_normalize(records, sep='_')
     ## clean the column names to display them in a nice way in the app
 
     grist_question_df.columns = [col.replace('fields_', '') for col in grist_question_df.columns]
-    print(grist_question_df)
+    #print(grist_question_df)
     
     
     
