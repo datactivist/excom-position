@@ -24,6 +24,7 @@ import json
 import streamlit as st
 import numpy as np
 import json
+import time
 
 # Le héros, un valeureux programmeur, maniait son clavier comme une épée..
 #...naviguant entre les méandres de GSheets et les terres inexplorées de Streamlit.
@@ -215,7 +216,7 @@ def colorizer_tab():
             'reponse': [],
             'score': []
         }    
-    st.session_state.data['reponse'] = []
+        st.session_state.data['reponse'] = []
 # Tandis que le programmeur avançait, les énigmes se dressaient sur son chemin. 
 # Des questions sur les compétences, des réponses à choisir, des niveaux de maîtrise à déterminer. Chaque ligne de code était une bataille, chaque requête une épreuve.
     
@@ -242,27 +243,71 @@ def colorizer_tab():
             api.add_records('Form0', new_records)
         
         ## Button to add questions to Grist
-        print(st.session_state.data)
+        
+        #st.session_state.data['profile_type'].append(profile_type)
+        #st.session_state.data['question'].append(question)
+        #st.session_state.data['reponse'].append(reponse)
+        #st.session_state.data['score'].append(score)
+        
+        #print(st.session_state.data)
+        
         if st.button("Ajouter", key=78):
+            st.session_state.data['profile_type'].append(profile_type)
+            st.session_state.data['question'].append(question)
+            st.session_state.data['reponse'].append(reponse)
+            st.session_state.data['score'].append(score)
 
             # Add the input values to Grist table
-            add_data_to_grist_table(profile_type, question, reponse, score)
-            new_data = pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})
+            existing_data = data0
+            # Extraction des données
+            records = existing_data['records']
+            formatted_data = [{'id': record['id'], **record['fields']} for record in records]
+            existing_data = pd.DataFrame(formatted_data)
+            new_df = pd.DataFrame(st.session_state.data)
+            print(new_df)
+            combined_df = pd.concat([existing_data, new_df], ignore_index=True)
+            print(combined_df)
             
-            if 'selected_data' not in st.session_state:
-                st.session_state.selected_data = new_data
-            else:
-                st.session_state.selected_data = pd.concat([st.session_state.selected_data, new_data], ignore_index=True)
+            # Convertir le DataFrame en dictionnaire
+            data_dict = combined_df.to_dict(orient='records')
 
+            # Formater le dictionnaire selon le format souhaité
+            formatted_data = {'records': [{'id': record['id'], 'fields': {k: record[k] for k in record if k != 'id'}} for record in data_dict]}
+
+            # Affichage du résultat
+            print("hello")
+            print(formatted_data)
             
-            st.session_state.selected_data = pd.concat([st.session_state.selected_data, pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})], ignore_index=True)
-            json_records = st.session_state.selected_data.to_dict(orient='records')
-            json_data = {'records': json_records}
-            print("JSON is ")
-            print(json_data)
-            st.session_state.selected_data = json_data
-            st.session_state.table_id = table_id_0
+            add_data_to_grist_table(profile_type, question, reponse, score)
+            
+            st.session_state.data = {
+                'profile_type': [],
+                'question': [],
+                'reponse': [],
+                'score': []
+            }
+            
             st.success("Data added to Grist table")
+            
+            # Mise à jour du DataFrame st.session_state.selected_data
+            #if 'selected_data' not in st.session_state or not isinstance(st.session_state.selected_data, pd.DataFrame):
+            #    st.session_state.selected_data = pd.DataFrame(columns=['profile_type', 'question', 'reponse', 'score'])
+
+            #new_data = pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})
+    
+            # Assurez-vous que les colonnes sont dans le même ordre
+            #new_data = new_data[st.session_state.selected_data.columns]
+
+            #st.session_state.selected_data = pd.concat([st.session_state.selected_data, new_data], ignore_index=True)
+            
+            
+            #json_records = st.session_state.selected_data.to_dict(orient='records')
+            #json_data = {'records': json_records}
+            #print("JSON is ")
+            #print(json_data)
+            #st.session_state.selected_data = json_data
+            #st.session_state.table_id = table_id_0
+            #st.success("Data added to Grist table")
             
         ## Button to add questions Google spreadsheet
 
