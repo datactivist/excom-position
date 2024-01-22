@@ -290,6 +290,7 @@ def colorizer_tab():
                     
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
+    print(st.session_state.data)
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     
@@ -298,18 +299,19 @@ def gatherizer_tab():
         st.warning("Please select data in the Colorizer tab first.")
         return
     if 'colorizer_data' in st.session_state:
+        
         df_colorizer = st.session_state.colorizer_data
         st.session_state.selected_data = df_colorizer
         st.session_state.table_id = table_id_0
         st.success("Données chargées depuis le DataFrame de session")
 
-    st.write(st.session_state.selected_data['records'])
+    
     
     ## create an empty dataframe to store the answers
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'reponse', 'score','profile_type'])
     
     ## if grist was used, transform the json file into a dataframe
-    grist_question_df = pd.json_normalize(st.session_state.selected_data['records'])
+    grist_question_df = st.session_state.selected_data
     
     ## clean the column names to display them in a nice way in the app
     grist_question_df.columns = [col.replace('fields.', '') for col in grist_question_df.columns]
