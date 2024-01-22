@@ -83,9 +83,9 @@ url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id_2}/r
 response = requests.get(url, headers=headers)
 if response.status_code == 200:
     data = response.json()
-    print("Houra")
+    #print("Houra")
     columns = data['records'][0]['fields'].keys()
-    print(list(columns)[0])
+    #print(list(columns)[0])
     # Process the data as needed
 else:
     print(f"Request failed with status code {response.status_code}")
@@ -98,9 +98,9 @@ url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id_3}/r
 response = requests.get(url, headers=headers)
 if response.status_code == 200:
     data2 = response.json()
-    print("Houra")
+    #print("Houra")
     columns = data2['records'][0]['fields'].keys()
-    print(list(columns)[0])
+    #print(list(columns)[0])
     # Process the data as needed
 else:
     print(f"Request failed with status code {response.status_code}")
@@ -114,7 +114,7 @@ response = requests.get(url, headers=headers)
 if response.status_code == 200:
     data0 = response.json()
     columns = data0['records'][0]['fields'].keys()
-    print(list(columns)[0])
+    #print(list(columns)[0])
     # Process the data as needed
 else:
     print(f"Request failed with status code {response.status_code}")
@@ -212,7 +212,7 @@ def colorizer_tab():
         st.session_state.data = {
             'profile_type':[],
             'question': [],
-            'answer': [],
+            'reponse': [],
             'score': []
         }
 # Tandis que le programmeur avançait, les énigmes se dressaient sur son chemin. 
@@ -240,7 +240,18 @@ def colorizer_tab():
             api.add_records('Form0', new_records)
         
         ## Button to add questions to Grist
+        print(st.session_state.data)
         if st.button("Ajouter", key=78):
+            print(st.session_state.data)
+            st.session_state.data['profile_type'].append(profile_type)
+            st.session_state.data['question'].append(question)
+            st.session_state.data['reponse'].append(reponse)
+            st.session_state.data['score'].append(score)
+            #Add the input to a temporary dataframe
+            df_colorizer = pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})
+            print(df_colorizer.head())
+            
+
             # Add the input values to Grist table
             add_data_to_grist_table(profile_type, question, reponse, score)
             st.session_state.selected_data = data0
@@ -331,8 +342,8 @@ def gatherizer_tab():
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
     
-    print(st.session_state)
-    print(df_answers)
+    #print(st.session_state)
+    #print(df_answers)
     
    #  
    ## get the names of the tables inside Grist
@@ -343,9 +354,7 @@ def gatherizer_tab():
     response = requests.get(url, headers=headers)
     if response.status_code == 200:
         tables = response.json()
-        # get the names of the tables
-        for table in tables["tables"]:
-            print(table['id'])
+        
     else:
         print(f"Request failed with status code {response.status_code}")
     
@@ -379,7 +388,7 @@ def gatherizer_tab():
         st.write(response)
         st.write(response.text)
         
-    print("The last table id" + str(st.session_state.table_id))
+    #print("The last table id" + str(st.session_state.table_id))
     
     ## Create a button to add the answers to the Grist table
     if st.button("Je valide"):
