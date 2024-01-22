@@ -346,6 +346,7 @@ def colorizer_tab():
                     
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
+    time.sleep(2)
     print(st.session_state.table_id)
     #print(st.session_state.selected_data)
     st.title("Recrutement des profils data")
