@@ -311,6 +311,7 @@ def gatherizer_tab():
     
     ## if grist was used, transform the json file into a dataframe
     grist_question_df = st.session_state.selected_data
+    print(grist_question_df['records'])
     records = grist_question_df['records']
     grist_question_df = pd.json_normalize(records, sep='_')
     grist_question_df = grist_question_df.drop(columns='id')
