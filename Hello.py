@@ -214,12 +214,14 @@ def colorizer_tab():
             'question': [],
             'reponse': [],
             'score': []
-        }
+        }    
+    st.session_state.data['reponse'] = []
 # Tandis que le programmeur avançait, les énigmes se dressaient sur son chemin. 
 # Des questions sur les compétences, des réponses à choisir, des niveaux de maîtrise à déterminer. Chaque ligne de code était une bataille, chaque requête une épreuve.
     
     ## Create the form to add questions to the Grist table
     with col1:
+
         st.header('Ma :blue[table] :sunglasses:')
         profile_type = st.text_input("Le profil")
         question = st.text_input("La question")
@@ -247,9 +249,12 @@ def colorizer_tab():
             st.session_state.data['question'].append(question)
             st.session_state.data['reponse'].append(reponse)
             st.session_state.data['score'].append(score)
+            
             #Add the input to a temporary dataframe
             df_colorizer = pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})
             print(df_colorizer.head())
+            
+            #combine the temporary dataframe with the existing grist data
             
 
             # Add the input values to Grist table
