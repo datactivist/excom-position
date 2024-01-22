@@ -247,13 +247,16 @@ def colorizer_tab():
 
             # Add the input values to Grist table
             add_data_to_grist_table(profile_type, question, reponse, score)
-            st.session_state.selected_data = data0
+            st.session_state.selected_data = pd.DataFrame(columns=['profile_type', 'question', 'reponse', 'score'])
+            st.session_state.selected_data = pd.concat([st.session_state.selected_data, pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})], ignore_index=True)
+            json_records = st.session_state.selected_data.to_dict(orient='records')
+            json_data = {'records': json_records}
+            print("JSON is ")
+            print(json_data)
+            st.session_state.selected_data = json_data
             st.session_state.table_id = table_id_0
             st.success("Data added to Grist table")
             
-            if 'colorizer_data' not in st.session_state:
-                st.session_state.colorizer_data = pd.DataFrame(columns=['profile_type', 'question', 'reponse', 'score'])
-            st.session_state.colorizer_data = pd.concat([st.session_state.colorizer_data, pd.DataFrame({'profile_type': [profile_type], 'question': [question], 'reponse': [reponse], 'score': [score]})], ignore_index=True)        
         ## Button to add questions Google spreadsheet
 
         #if st.button("Ajouter", key=10):
@@ -291,6 +294,7 @@ def colorizer_tab():
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
     print(st.session_state.table_id)
+    print(st.session_state.selected_data)
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     
@@ -314,7 +318,6 @@ def gatherizer_tab():
     print(grist_question_df['records'])
     records = grist_question_df['records']
     grist_question_df = pd.json_normalize(records, sep='_')
-    grist_question_df = grist_question_df.drop(columns='id')
     ## clean the column names to display them in a nice way in the app
 
     grist_question_df.columns = [col.replace('fields_', '') for col in grist_question_df.columns]
