@@ -288,6 +288,7 @@ def colorizer_tab():
             }
             st.session_state.selected_data = data0
             st.session_state.table_id = table_id_0
+            st.rerun()
             st.success("Data added to Grist table")
             
             # Mise à jour du DataFrame st.session_state.selected_data
@@ -346,7 +347,6 @@ def colorizer_tab():
                     
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
-    st.rerun()
     #print(st.session_state.table_id)
     #print(st.session_state.selected_data)
     st.title("Recrutement des profils data")
