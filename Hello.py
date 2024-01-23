@@ -132,6 +132,9 @@ menu_data = [
 if 'selected_tab' not in st.session_state:
     st.session_state.selected_tab = "Qualification"
 
+#initialize selected_data in session state
+if 'selected_data' not in st.session_state:
+    st.session_state.selected_data = {}
 # La mission était claire : sauver le royaume des données...
 # ...en recrutant les profils data les plus qualifiés.
 
@@ -346,8 +349,6 @@ def colorizer_tab():
                     
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
-    st.write(st.session_state.selected_data)
-    #print(st.session_state.table_id)
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     
@@ -367,8 +368,7 @@ def gatherizer_tab():
     
     ## create an empty dataframe to store the answers
     df_answers = pd.DataFrame(columns=['nom', 'prenom', 'mail', 'question', 'reponse', 'score','profile_type'])
-    print("Les données après")
-    print(st.session_state.selected_data)
+    
     ## if grist was used, transform the json file into a dataframe
     grist_question_df = st.session_state.selected_data
     #print(grist_question_df['records'])
@@ -396,7 +396,7 @@ def gatherizer_tab():
     prenom = st.text_input("Prenom", key='prenom')
     mail = st.text_input("Mail", key='mail')
     #append the values of the inputs to the df_answers
-    df_answers = df_answers.append({'nom': nom, 'prenom': prenom, 'mail': mail}, ignore_index=True)
+    # df_answers = df_answers.append({'nom': nom, 'prenom': prenom, 'mail': mail}, ignore_index=True)
     st.header("Parlons de vous (et de data) :floppy_disk: ")
 
     ## for each question, display the question and the possible answers
@@ -406,13 +406,13 @@ def gatherizer_tab():
         score = grist_question_df[grist_question_df.reponse == answer_people].score.values
         profile_type_val = grist_question_df[grist_question_df.reponse == answer_people].profile_type.values
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'reponse': [answer_people],'score': [score],'profile_type':[profile_type_val]})
+        print(df)
+    
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
+        print(df_answers)
     
-    #print(st.session_state)
-    #print(df_answers)
-    
-   #  
+   # 
    ## get the names of the tables inside Grist
     subdomain = "docs"
     doc_id = "nSV5r7CLQCWzKqZCz7qBor"
@@ -428,37 +428,29 @@ def gatherizer_tab():
     #create a function to add the answers to the st.session_state
     def add_answers_to_grist_table(df_answers, table_id):
         st.dataframe(df_answers)
-        # Convert the "score" and "profile_type" columns to a more suitable data type (e.g., list)
-        df_answers["score"] = df_answers["score"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
-        df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
-
-        # Fill NaN values with None for all columns
-        df_answers = df_answers.applymap(lambda x: None if pd.isna(x) else x)
-        
-        st.write(str(table_id))
         
         # Convert DataFrame to list of records
         records = [{"fields": record} for record in df_answers.to_dict(orient='records')]
-        st.write(records)
+        
         # Prepare the request body
         data = {"records": records}
-        st.write(data)
+        
         docId = "nSV5r7CLQCWzKqZCz7qBor"
         tableId = table_id
 
         # Use the Grist API to add the new rows to the specified Grist table
         url = f"https://{subdomain}.getgrist.com/api/docs/{docId}/tables/{tableId}/records"
-        st.write(url)
         
         
         response = requests.post(url, headers=headers, json=data)
         st.write(response)
         st.write(response.text)
         
-    #print("The last table id" + str(st.session_state.table_id))
+    print("The last table id " + str(st.session_state.table_id))
     
     ## Create a button to add the answers to the Grist table
     if st.button("Je valide"):
+        
         add_answers_to_grist_table(df_answers, st.session_state.table_id)
         #conn.update(worksheet="Gatherizer", data=df_answers)
         st.success("Bien reçu ! A bientôt <3")
