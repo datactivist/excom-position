@@ -391,6 +391,7 @@ def gatherizer_tab():
     grist_question_df = grist_question_df 
     ## from the data, select the unique questions
     unique_questions = grist_question_df.question.unique()
+    unique_reponse = grist_question_df.reponse.unique()
     
     ## create a form to gather the answers from the population
     st.header("Qui êtes-vous ? :disguised_face:")
@@ -404,7 +405,7 @@ def gatherizer_tab():
     ## for each question, display the question and the possible answers
     for i, question_people in enumerate(unique_questions):
         st.write(question_people)
-        answer_people = st.selectbox("Answers", grist_question_df[grist_question_df.question == question_people].reponse, index=None, key = i)
+        answer_people = st.selectbox("Votre réponse", grist_question_df[grist_question_df.question == question_people].reponse.unique(), index=None, key = i)
         score = grist_question_df[grist_question_df.reponse == answer_people].score.values
         profile_type_val = grist_question_df[grist_question_df.reponse == answer_people].profile_type.values
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'reponse': [answer_people],'score': [score],'profile_type':[profile_type_val]})
@@ -456,6 +457,7 @@ def gatherizer_tab():
     if st.button("Je valide"):
         
         add_answers_to_grist_table(df_answers, st.session_state.table_id)
+        st.session_state.selected_data = df_answers
         #conn.update(worksheet="Gatherizer", data=df_answers)
         st.success("Bien reçu ! A bientôt <3")
     
@@ -467,6 +469,7 @@ def gatherizer_tab():
 # Des profils émergeaient, formant des constellations dans le ciel de données.
 
 def dispenser_tab():
+    print(st.session_state.selected_data)
     st.header("Position des profils")
     st.markdown("Grâce au _radar graph_, analysez la distribution des profils au sein de votre population")
     with elements("nivo_charts"):
