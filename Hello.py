@@ -429,12 +429,28 @@ def gatherizer_tab():
     def add_answers_to_grist_table(df_answers, table_id):
         st.dataframe(df_answers)
         
+        # Assuming df_answers is your DataFrame
+
+        # Convert the "score" and "profile_type" columns to a more suitable data type (e.g., list)
+        df_answers["score"] = df_answers["score"].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
+        df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
+        print("HERE")
+        print(type(df_answers['score']))
+        
+        #remove "[]" from the score column and convert to int
+        df_answers['score'] = df_answers['score'].str.strip('[]')
+        # remove "[]" from the profile_type column and convert to string
+        df_answers['profile_type'] = df_answers['profile_type'].str.strip('[]').astype(str)
+        
+        # Convert the entire DataFrame to lists to make it JSON serializable
+        df_answers = df_answers.applymap(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
+
         # Convert DataFrame to list of records
-        records = [{"fields": record} for record in df_answers.to_dict(orient='records')]
+        records = [{"fields": {"nom":record["nom"],"prenom":record["prenom"],"mail":record["mail"],"score": record["score"], "profile_type": record["profile_type"]}} for record in df_answers.to_dict(orient='records')]
         
         # Prepare the request body
         data = {"records": records}
-        
+        print(data)
         docId = "nSV5r7CLQCWzKqZCz7qBor"
         tableId = table_id
 
