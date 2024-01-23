@@ -460,7 +460,7 @@ def gatherizer_tab():
     
     ## Create a button to add the answers to the Grist table
     if st.button("Je valide"):
-        st.write(df_answers)
+        
         add_answers_to_grist_table(df_answers, st.session_state.table_id)
         st.session_state.selected_data = df_answers
         #conn.update(worksheet="Gatherizer", data=df_answers)
@@ -474,7 +474,7 @@ def gatherizer_tab():
 # Des profils émergeaient, formant des constellations dans le ciel de données.
 
 def dispenser_tab():
-    st.write(st.session_state.table_id)
+    
     
     ## Load Data from Grist
     subdomain = "docs"
