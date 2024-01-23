@@ -434,14 +434,12 @@ def gatherizer_tab():
     
     #create a function to add the answers to the st.session_state
     def add_answers_to_grist_table(df_answers, table_id):
-        st.dataframe(df_answers)
 
         # Convert DataFrame to list of records
         records = [{"fields": {"nom":record["nom"],"prenom":record["prenom"],"question":record["question"],"reponse":record["reponse"],"mail":record["mail"],"score": record["score"], "profile_type": record["profile_type"]}} for record in df_answers.to_dict(orient='records')]
         
         # Prepare the request body
         data = {"records": records}
-        print(data)
         docId = "nSV5r7CLQCWzKqZCz7qBor"
         tableId = table_id
 
