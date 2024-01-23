@@ -356,7 +356,9 @@ def gatherizer_tab():
     
     if 'selected_data' not in st.session_state:
         st.warning("Please select data in the Colorizer tab first.")
+        
         return
+    
     #print(st.session_state.selected_data)
     #if 'colorizer_data' in st.session_state:
     #    
@@ -406,13 +408,18 @@ def gatherizer_tab():
         score = grist_question_df[grist_question_df.reponse == answer_people].score.values
         profile_type_val = grist_question_df[grist_question_df.reponse == answer_people].profile_type.values
         df = pd.DataFrame({'nom': [nom], 'prenom': [prenom], 'mail': [mail],'question': [question_people], 'reponse': [answer_people],'score': [score],'profile_type':[profile_type_val]})
-        print(df)
+        
     
         # Append the data to the df_answers DataFrame
         df_answers = df_answers.append(df, ignore_index=True)
-        print(df_answers)
     
-   # 
+    # convert the score and profile_type columns to int and string
+    df_answers['score'] = df_answers['score'].apply(lambda x: int(x[0]) if isinstance(x, np.ndarray) and len(x) > 0 and isinstance(x[0], (int, np.integer)) else int(x) if isinstance(x, (int, np.integer)) else str(x))
+    df_answers['profile_type'] = df_answers['profile_type'].apply(lambda x: int(x[0]) if isinstance(x, np.ndarray) and len(x) > 0 and isinstance(x[0], (int, np.integer)) else int(x) if isinstance(x, (int, np.integer)) else str(x))
+    #remove "[]" and " ' " from the profile type column
+    df_answers['profile_type'] = df_answers['profile_type'].str.strip('[]').str.strip("'")
+    
+    
    ## get the names of the tables inside Grist
     subdomain = "docs"
     doc_id = "nSV5r7CLQCWzKqZCz7qBor"
@@ -428,25 +435,9 @@ def gatherizer_tab():
     #create a function to add the answers to the st.session_state
     def add_answers_to_grist_table(df_answers, table_id):
         st.dataframe(df_answers)
-        
-        # Assuming df_answers is your DataFrame
-
-        # Convert the "score" and "profile_type" columns to a more suitable data type (e.g., list)
-        df_answers["score"] = df_answers["score"].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
-        df_answers["profile_type"] = df_answers["profile_type"].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else x)
-        print("HERE")
-        print(type(df_answers['score']))
-        
-        #remove "[]" from the score column and convert to int
-        df_answers['score'] = df_answers['score'].str.strip('[]')
-        # remove "[]" from the profile_type column and convert to string
-        df_answers['profile_type'] = df_answers['profile_type'].str.strip('[]').astype(str)
-        
-        # Convert the entire DataFrame to lists to make it JSON serializable
-        df_answers = df_answers.applymap(lambda x: x.tolist() if isinstance(x, np.ndarray) else x)
 
         # Convert DataFrame to list of records
-        records = [{"fields": {"nom":record["nom"],"prenom":record["prenom"],"mail":record["mail"],"score": record["score"], "profile_type": record["profile_type"]}} for record in df_answers.to_dict(orient='records')]
+        records = [{"fields": {"nom":record["nom"],"prenom":record["prenom"],"question":record["question"],"reponse":record["reponse"],"mail":record["mail"],"score": record["score"], "profile_type": record["profile_type"]}} for record in df_answers.to_dict(orient='records')]
         
         # Prepare the request body
         data = {"records": records}
@@ -462,7 +453,7 @@ def gatherizer_tab():
         st.write(response)
         st.write(response.text)
         
-    print("The last table id " + str(st.session_state.table_id))
+    
     
     ## Create a button to add the answers to the Grist table
     if st.button("Je valide"):
