@@ -471,7 +471,31 @@ def gatherizer_tab():
 # Des profils émergeaient, formant des constellations dans le ciel de données.
 
 def dispenser_tab():
-    st.write(st.session_state.selected_data)
+    st.write(st.session_state.table_id)
+    
+    ## Load Data from Grist
+    subdomain = "docs"
+    doc_id = "nSV5r7CLQCWzKqZCz7qBor"
+    table_id = st.session_state.table_id
+    print(table_id)
+    url = f"https://{subdomain}.getgrist.com/api/docs/{doc_id}/tables/{table_id}/records"
+    response = requests.get(url, headers=headers)
+    
+    if response.status_code == 200:
+        data = response.json()
+        print("Houra")
+        columns = data['records'][0]['fields'].keys()
+        #print(list(columns)[0])
+        # Process the data as needed
+    else:
+        print(f"Request failed with status code {response.status_code}")
+    
+    #turn data into a dataframe with columns "nom","prenom","mail","question","answer","score","profile_type"
+    records = data['records']
+    data = pd.json_normalize(records, sep='_')
+    data.columns = [col.replace('fields_', '') for col in data.columns]
+    st.write(data)
+    
     st.header("Position des profils")
     st.markdown("Grâce au _radar graph_, analysez la distribution des profils au sein de votre population")
     with elements("nivo_charts"):
