@@ -135,13 +135,6 @@ if 'selected_tab' not in st.session_state:
 # La mission était claire : sauver le royaume des données...
 # ...en recrutant les profils data les plus qualifiés.
 
-if 'selected_data' not in st.session_state:
-        st.session_state.selected_data = {
-            'profile_type':[],
-            'question': [],
-            'reponse': [],
-            'score': []
-        } 
 
 ## Create a tab to add the answers to the database
 def colorizer_tab():
@@ -260,11 +253,13 @@ def colorizer_tab():
         #print(st.session_state.data)
         
         if st.button("Ajouter", key=78):
-            st.session_state.selected_data['profile_type'].append(profile_type)
-            st.session_state.selected_data['question'].append(question)
-            st.session_state.selected_data['reponse'].append(reponse)
-            st.session_state.selected_data['score'].append(score)
             
+            #create an empty dataframe to store the answers
+            new_df = pd.DataFrame(columns=['profile_type', 'question', 'reponse', 'score'])
+            
+            #Add the input values to new_df
+            new_df = new_df.append({'profile_type': profile_type, 'question': question, 'reponse': reponse, 'score': score}, ignore_index=True)
+            print(new_df)
 
             # Add the input values to Grist table
             existing_data = data0
@@ -272,32 +267,23 @@ def colorizer_tab():
             records = existing_data['records']
             formatted_data = [{'id': record['id'], **record['fields']} for record in records]
             existing_data = pd.DataFrame(formatted_data)
-            new_df = pd.DataFrame(st.session_state.selected_data)
-            #print(new_df)
+            
+            
             combined_df = pd.concat([existing_data, new_df], ignore_index=True)
-            #print(combined_df)
+            
             
             # Convertir le DataFrame en dictionnaire
             data_dict = combined_df.to_dict(orient='records')
 
             # Formater le dictionnaire selon le format souhaité
             formatted_data = {'records': [{'id': record['id'], 'fields': {k: record[k] for k in record if k != 'id'}} for record in data_dict]}
-
-            # Affichage du résultat
-            #print("hello")
-            print("Les données avant")
+            print("Formatted data is")
             print(formatted_data)
+
+        
             
             add_data_to_grist_table(profile_type, question, reponse, score)
             
-            st.session_state.data = {
-                'profile_type': [],
-                'question': [],
-                'reponse': [],
-                'score': []
-            }
-            
-        
             st.session_state.selected_data = formatted_data
             
         
@@ -352,10 +338,6 @@ def colorizer_tab():
         #    }
     
      
-        
-    
-
-    
     with col2:
         ## display an image with inspiration for the question that can be asked
         st.header(':blue[Inspiration] :star-struck:')
