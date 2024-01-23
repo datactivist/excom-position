@@ -494,12 +494,12 @@ def dispenser_tab():
     records = data['records']
     data = pd.json_normalize(records, sep='_')
     data.columns = [col.replace('fields_', '') for col in data.columns]
-    st.write(data)
+    
     
     st.header("Position des profils")
     st.markdown("Grâce au _radar graph_, analysez la distribution des profils au sein de votre population")
     with elements("nivo_charts"):
-        form_data = conn.read(worksheet="Gatherizer", usecols=["nom","prenom","mail","question","answer","score","profile_type"],ttl=0, nrows=10) 
+        form_data = data
         # Obtenez les valeurs uniques de la colonne "nom"
         unique_noms = form_data['nom'].unique()
 
@@ -517,7 +517,7 @@ def dispenser_tab():
         
                 # Vérifiez s'il y a des données pour le nom et le profil actuels
                 if not filtered_data.empty:
-                    score = int(filtered_data['score'].str.strip('[]').values[0])
+                    score = filtered_data['score']
                     profile_data[nom] = score
 
             DATA.append(profile_data)
@@ -576,30 +576,30 @@ def dispenser_tab():
 # Le tableau se transforma en un champ de bataille stratégique, où chaque programmeur était assigné à sa place.
 
     #create a df that is form_data df but group by name
-    form_data = form_data[form_data['score'].notna()]
-    form_data['score'] = form_data['score'].str.strip('[]').astype(int)
-    form_data_grouped = form_data.groupby(['nom', 'prenom'])['score'].mean().reset_index()
-    form_data_grouped['groupe'] = pd.NA
-    st.header("Constitution des groupes")
-    st.markdown("Répartissez les profils au sein de groupes")
-    groups = st.data_editor(
-        form_data_grouped,
-        column_config={
-            "group": st.column_config.NumberColumn(
-                "Group",
-                help="What group",
-                min_value=1,
-                max_value=10,
-                step=1,
-                format="%d 👭",
-        )
-        }
-    )
+    #form_data = form_data[form_data['score'].notna()]
+    #form_data['score'] = form_data['score'].astype(int)
+    #form_data_grouped = form_data.groupby(['nom', 'prenom'])['score'].mean().reset_index()
+    #form_data_grouped['groupe'] = pd.NA
+    #st.header("Constitution des groupes")
+    #st.markdown("Répartissez les profils au sein de groupes")
+    #groups = st.data_editor(
+    #    form_data_grouped,
+    #    column_config={
+    #        "group": st.column_config.NumberColumn(
+    #            "Group",
+    #            help="What group",
+    #            min_value=1,
+    #            max_value=10,
+    #            step=1,
+    #            format="%d 👭",
+    #    )
+    #    }
+    #)
     #st.dataframe(groups)
     #st.write(st.session_state)
-    if st.button("Assigner", key=8):
-        conn.update(worksheet="Dispenser", data=groups)
-        st.success("C'est fait !")
+    #if st.button("Assigner", key=8):
+    #    conn.update(worksheet="Dispenser", data=groups)
+    #    st.success("C'est fait !")
         
 
 
