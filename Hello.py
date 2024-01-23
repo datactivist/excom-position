@@ -349,15 +349,17 @@ def colorizer_tab():
                     
 ## create a tab to gather the answers from the population to questions added to the database
 def gatherizer_tab():
+    print(st.session_state)
+    if 'table_id' not in st.session_state:
+        st.warning("Veuillez charger un data position")
+        return
+    
     st.title("Recrutement des profils data")
     st.markdown("Bienvenue sur le formulaire de recrutement. Répondez aux questions pour valider votre candidature. Nous reviendrons vers vous très vite.")
     
     ## Check if there are data available loaded
     
-    if 'selected_data' not in st.session_state:
-        st.warning("Please select data in the Colorizer tab first.")
-        
-        return
+    
     
     #print(st.session_state.selected_data)
     #if 'colorizer_data' in st.session_state:
@@ -469,7 +471,7 @@ def gatherizer_tab():
 # Des profils émergeaient, formant des constellations dans le ciel de données.
 
 def dispenser_tab():
-    print(st.session_state.selected_data)
+    st.write(st.session_state.selected_data)
     st.header("Position des profils")
     st.markdown("Grâce au _radar graph_, analysez la distribution des profils au sein de votre population")
     with elements("nivo_charts"):
