@@ -403,6 +403,9 @@ def gatherizer_tab():
     #append the values of the inputs to the df_answers
     # df_answers = df_answers.append({'nom': nom, 'prenom': prenom, 'mail': mail}, ignore_index=True)
     st.header("Parlons de vous (et de data) :floppy_disk: ")
+    
+    
+    
 
     ## for each question, display the question and the possible answers
     for i, question_people in enumerate(unique_questions):
@@ -457,7 +460,7 @@ def gatherizer_tab():
     
     ## Create a button to add the answers to the Grist table
     if st.button("Je valide"):
-        
+        st.write(df_answers)
         add_answers_to_grist_table(df_answers, st.session_state.table_id)
         st.session_state.selected_data = df_answers
         #conn.update(worksheet="Gatherizer", data=df_answers)
