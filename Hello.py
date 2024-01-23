@@ -141,7 +141,7 @@ if 'selected_data' not in st.session_state:
 
 ## Create a tab to add the answers to the database
 def colorizer_tab():
-    st.write(st.session_state.selected_data)
+    
     st.title("Table de qualification des profils data")
     st.markdown("Vous envisagez de classer une population en différents profils _data_.")
     st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
@@ -450,8 +450,7 @@ def gatherizer_tab():
         
         
         response = requests.post(url, headers=headers, json=data)
-        st.write(response)
-        st.write(response.text)
+        
         
     
     
