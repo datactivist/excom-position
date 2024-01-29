@@ -157,58 +157,24 @@ def colorizer_tab():
         with st.container(border=True):
             st.text("Data Position Maitre")
             expander = st.expander("Description")
-            expander.write("Hello")
+            expander.write("Le Data Position par défaut créé par Datactivist")
             if st.button("Charger le data position",type="primary", key=1):
                 st.session_state.selected_data = data2
                 st.session_state.table_id = table_id_3
                 st.success("Data position chargé 🚚")
+    with col2:
         with st.container(border=True):
             st.text("Data Position pour Hackathon")
             expander = st.expander("Description")
-            expander.write("Hello")
-            if st.button("Charger le data position",type="primary", key=2):
-                st.session_state.selected_data = data
-                st.session_state.table_id = table_id_2
-                st.success("Data position chargé 🚚")
-        with st.container(border=True):
-            st.text("k")
-            expander = st.expander("Description")
-            expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=3)
-    with col2:
-        with st.container(border=True):
-            st.text("h")
-            expander = st.expander("Description")
-            expander.write("Hello")
+            expander.write("Le Data Position créé pour organiser les participants d'un Hackathon en équipe")
             st.button("Charger le data position",type="primary", key=4)
-        with st.container(border=True):
-            st.text("w")
-            expander = st.expander("Description")
-            expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=5)
-        with st.container(border=True):
-            st.text("k")
-            expander = st.expander("Description")
-            expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=6)
     with col3:
         with st.container(border=True):
-            st.text("h")
+            st.text("__")
             expander = st.expander("Description")
-            expander.write("Hello")
+            expander.write("___")
             st.button("Charger le data position",type="primary", key=7)
-        with st.container(border=True):
-            st.text("w")
-            expander = st.expander("Description")
-            expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=8)
-        with st.container(border=True):
-            st.text("k")
-            expander = st.expander("Description")
-            expander.write("Hello")
-            st.button("Charger le data position",type="primary", key=9)
     
-
 
     col1, col2 = st.columns(2)
     
