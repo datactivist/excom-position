@@ -143,7 +143,14 @@ if 'selected_data' not in st.session_state:
 def colorizer_tab():
     
     st.title("Qualifier vos profils data")
-    st.empty()
+    
+    #Create empty containers for space
+    container = st.container(border=False)
+    container.write("")
+    container.write("")
+    container.write("")
+    container.write("")
+    
     
     
     st.header("En utilisant les Data Position de la communauté")
@@ -172,7 +179,16 @@ def colorizer_tab():
             expander.write("___")
             st.button("Charger le data position",type="primary", key=7)
     
-
+    #Create empty containers for space
+    container = st.container(border=False)
+    container.write("")
+    container.write("")
+    container.write("")
+    container.write("")
+    container.write("")
+    
+    
+    
     col1, col2 = st.columns(2)
     
     ## Create a storage where the data will be stored dynamically
@@ -186,6 +202,8 @@ def colorizer_tab():
         st.session_state.data['reponse'] = []
 # Tandis que le programmeur avançait, les énigmes se dressaient sur son chemin. 
 # Des questions sur les compétences, des réponses à choisir, des niveaux de maîtrise à déterminer. Chaque ligne de code était une bataille, chaque requête une épreuve.
+    
+    
     
     ## Create the form to add questions to the Grist table
     with col1:
