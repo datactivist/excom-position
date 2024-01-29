@@ -143,6 +143,7 @@ if 'selected_data' not in st.session_state:
 def colorizer_tab():
     
     st.title("Qualifier vos profils data")
+    st.empty()
     
     
     st.header("En utilisant les Data Position de la communauté")
