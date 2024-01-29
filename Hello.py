@@ -142,14 +142,10 @@ if 'selected_data' not in st.session_state:
 ## Create a tab to add the answers to the database
 def colorizer_tab():
     
-    st.title("Table de qualification des profils data")
-    st.markdown("Vous envisagez de classer une population en différents profils _data_.")
-    st.markdown("Chaque **profil data** correspond à un ensemble de compétences auxquelles sont associées un certain niveau de maitrise. ") 
-    st.markdown("Pour évaluer le niveau de maitrise, vous poserez à la population des **questions** ")
-    st.markdown("A chaque question est associé un ensemble de 4 **réponses** possibles.")
-    st.markdown("Chaque réponse correspond à un certain **niveau de maîtrise**")
+    st.title("Qualifier vos profils data")
     
-    st.header("Liste des questionnaires de la communauté")
+    
+    st.header("En utilisant les Data Position de la communauté")
     col1, col2, col3 = st.columns(3)
     
     # Create elements with the different data positions that can be used
@@ -193,7 +189,7 @@ def colorizer_tab():
     ## Create the form to add questions to the Grist table
     with col1:
 
-        st.header('Ma :blue[table] :sunglasses:')
+        st.header('En créant votre Data Position :sunglasses:')
         profile_type = st.text_input("Le profil")
         question = st.text_input("La question")
         reponse = st.text_input("Une réponse possible")
@@ -309,7 +305,7 @@ def colorizer_tab():
      
     with col2:
         ## display an image with inspiration for the question that can be asked
-        st.header(':blue[Inspiration] :star-struck:')
+        st.header("Une source d'inspiration :star-struck:")
         st.image("resource/skills_framework.png")
          
                     
