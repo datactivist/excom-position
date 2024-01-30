@@ -34,7 +34,7 @@ import time
 st.set_page_config(layout='wide', initial_sidebar_state='collapsed')
 custom_html = """
 <div class="banner">
-    <img src="https://github.com/ArthurSrz/forge-data-position-final/blob/main/resource/logo_forge.png?raw=true" alt="Banner Image">
+    <img src="https://raw.githubusercontent.com/datactivist/excom-position/main/resource/excom_logo.png" alt="Banner Image">
 </div>
 <style>
     .banner {
@@ -142,7 +142,7 @@ if 'selected_data' not in st.session_state:
 ## Create a tab to add the answers to the database
 def colorizer_tab():
     
-    st.title("Qualifier vos profils data")
+    st.title("Qualifier vos profils commerçants")
     
     #Create empty containers for space
     container = st.container(border=False)
